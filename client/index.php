@@ -1,4 +1,7 @@
-<?php include('../Database/DatabaseConnection.php');?>
+<?php 
+include('../Database/DatabaseConnection.php');
+include('../functions/common_functions.php');
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -37,14 +40,7 @@
               >
               
                 <?php
-
-                $select_categories = "Select * from category";
-                $result_categories = mysqli_query($adminconnection, $select_categories);
-                while($row_data = mysqli_fetch_assoc($result_categories)){
-                  $category_name = $row_data['Category_Name'];
-                  $category_id = $row_data['Category_ID'];
-                  echo "<li><a href='index.php?category=$category_id' class='dropdown-item'>$category_name</a></li>";
-                }
+                  get_categories();
                 ?>
               </ul>
             </li>
@@ -55,44 +51,9 @@
 
 
     <div class="card-group">
-        <!-- fetching products -->
         <?php
-          $select_products = "Select * from product order by rand() limit 0,9";
-          $result_products = mysqli_query($adminconnection, $select_products);
-          while($row_data = mysqli_fetch_assoc($result_products)){
-            $Product_ID = $row_data['Product_ID'];
-            $SKU = $row_data['SKU'];
-            $Title = $row_data['Title'];
-            $Weight = $row_data['Weight'];
-            $Category_ID = $row_data['Category_ID'];
-            $Subcategory_ID = $row_data['Subcategory_ID'];
-            $Image = $row_data['Image'];
-
-            echo "
-            <div class='card card-main'>
-            
-                <img src='../Admin/Product_Images/$Image' class='card-img-top' alt='$Title'>
-               
-              <div class='card-body'>
-                
-                <!-- <p class='card-text text-start'>
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p> -->
-                
-
-            </div>
-            <div class='col-md-12 text-center'>
-            <div class='card-footer'>
-            <h5 class='card-title'>$Title</h5>
-            <button class='btn btn-secondary'>View More</button>
-</div>
-</div>
-            
-          </div>";
-
-            // echo $Image;
-          }
+          get_products();
+          get_unique_category();
         ?>
         
         
