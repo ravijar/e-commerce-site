@@ -9,7 +9,7 @@ include('../client/inc/header.php');
     <div class="card py-3 px-3 w-50">
       <h2 class="text-primary">Create Account</h2>
 
-      <form action="LoginPage.php" method="post" class="px-4 py-3 text-start">
+      <form action="" method="post" class="px-4 py-3 text-start">
         <div class="mb-3">
           <label for="exampleDropdownFormEmail1" class="form-label"
             >User Name</label
