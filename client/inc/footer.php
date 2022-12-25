@@ -1,5 +1,6 @@
+</div>  
     <footer class="text-center mt-5">
-        Copyright &copy; 2022
+        All rights reserved &copy; 2022
     </footer>
  
     </body>
