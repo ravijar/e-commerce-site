@@ -50,5 +50,6 @@ include('../functions/common_functions.php');
         
     </div>
   </div>
-</body>
-</html>
+<?php 
+  include('../client/inc/footer.php');
+?>

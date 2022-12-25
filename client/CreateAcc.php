@@ -121,8 +121,9 @@ include('../client/inc/header.php');
     >
     </div>
   </div>
-</body>
-</html>
+<?php 
+  include('../client/inc/footer.php');
+?>
 
 <?php
 
