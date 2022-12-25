@@ -93,8 +93,9 @@ include('../client/inc/header.php');
       </div>  
     </div>
     </div>
-</body>
-</html>
+<?php 
+  include('../client/inc/footer.php');
+?>
 
 <?php
 
