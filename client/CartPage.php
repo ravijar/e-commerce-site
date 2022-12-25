@@ -54,9 +54,9 @@ include('../client/inc/header.php');
         <span class="bd-highlight pb-3 ">5000</span>
         <span class="bd-highlight pb-3 "> LKR</span>
       </div>
-      <button type="submit" class="btn btn-primary mt-auto p-2 bd-highlight">
-        Checkout
-      </button>
+      <a href='LoginPage.php' class='btn btn-primary mt-3'>Checkout</a>
+        
+      
     </div>
   </div>
 </body>

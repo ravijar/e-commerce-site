@@ -2,6 +2,49 @@
 include('../client/inc/header.php');
 ?>
 
+<?php
+
+if(isset($_POST['user_register'])){
+    $user_username = $_POST['user_username'];
+    $user_password = $_POST['user_password'];
+    $hash_password = password_hash($user_password, PASSWORD_DEFAULT);
+    $user_confirm_password = $_POST['user_confirm_password'];
+    $user_firstname = $_POST['user_firstname'];
+    $user_lastname = $_POST['user_lastname'];
+    $user_contact = $_POST['user_contact'];
+    $user_address = $_POST['user_address'];
+    $user_city = $_POST['user_city'];
+
+    //select query
+
+    $select_query = "Select * from user where User_name='$user_username'";
+    $result = mysqli_query($adminconnection, $select_query);
+    $row_count = mysqli_num_rows($result);
+    if($row_count>0){
+      echo "<script>alert('Username already exists.')</script>"; 
+    }
+    else if($user_password != $user_confirm_password){
+      echo "<script>alert('Passwords do not match.')</script>";
+    }
+    else{
+      //insert query
+      $insert_query = "insert into user (User_Name, Password, First_Name, Last_Name, Telephone_No, Street_Address,
+      City) values ('$user_username', '$hash_password', '$user_firstname', '$user_lastname', '$user_contact',
+      '$user_address', '$user_city')";
+      
+      $sql_execute = mysqli_query($adminconnection, $insert_query);
+      if($sql_execute){
+        echo "<script>alert('Data inserted successfully.')</script>";
+      }else{
+        die(mysqli_error($adminconnection));	
+      }
+    }
+
+}
+
+?>
+
+
 <body>
   <div class="container">
     <div class="row align-items-start g-5 align-items-start">
@@ -10,7 +53,7 @@ include('../client/inc/header.php');
         <div class=" login my-5">
           <div class="card py-3 px-3">
             <h2 class="text-primary text-start">User Log In</h2>
-            <form action="" method="post" class="px-4 py-3 text-start">
+            <form action="CheckoutPage.php" method="post" class="px-4 py-3 text-start">
               <div class="mb-3">
                 <label for="exampleDropdownFormEmail1" class="form-label"
                   >User Name</label>
@@ -20,6 +63,7 @@ include('../client/inc/header.php');
                   id="exampleDropdownFormEmail1"
                   placeholder="Username"
                   name="user_username"
+                  required
                 />
               </div>
               <div class="mb-3">
@@ -32,6 +76,7 @@ include('../client/inc/header.php');
                   id="exampleDropdownFormPassword1"
                   placeholder="Password"
                   name="user_password"
+                  required
                 />
               </div>
               <div class="mb-3"></div>
@@ -47,7 +92,7 @@ include('../client/inc/header.php');
         <div class=" login my-5">
           <div class="card py-3 px-3">
             <h2 class="text-primary text-start">Guest Log In</h2>
-            <form action="" method="post" class="px-4 py-3 text-start">
+            <form action="CheckoutPage.php" method="post" class="px-4 py-3 text-start">
               <div class="mb-3">
                 <label for="exampleDropdownFormEmail1" class="form-label"
                   >Telephone No.</label
@@ -58,6 +103,7 @@ include('../client/inc/header.php');
                   id="exampleDropdownFormEmail1"
                   placeholder="Telephone"
                   name="guest_contact"
+                  required
                 />
               </div>
               <div class="mb-3">
@@ -70,6 +116,7 @@ include('../client/inc/header.php');
                   id="exampleDropdownFormEmail1"
                   placeholder="Street Address"
                   name="guest_address"
+                  required
                 />
               </div>
 
@@ -81,6 +128,7 @@ include('../client/inc/header.php');
                   id="exampleDropdownFormEmail1"
                   placeholder="City"
                   name="guest_city"
+                  required
                 />
               </div>
 
@@ -97,40 +145,3 @@ include('../client/inc/header.php');
   include('../client/inc/footer.php');
 ?>
 
-<?php
-
-if(isset($_POST['user_login'])){
-  $user_username = $_POST['user_username'];
-  $user_password = $_POST['user_password'];
-
-  $select_query = "Select * from user where User_Name = '$user_username'";
-  $result = mysqli_query($adminconnection, $select_query);
-  $row_count = mysqli_num_rows($result);
-  $row_data = mysqli_fetch_assoc($result);
-  if($row_count>0){
-    if(password_verify($user_password, $row_data['Password'])){
-      echo "<script>alert('Login successful.')</script>";
-    }else{
-      echo "<script>alert('Invalid Credentails.')</script>"; 
-    }
-  }else{
-    echo "<script>alert('Invalid Credentails.')</script>"; 
-  }
-}
-
-if(isset($_POST['guest_login'])){
-  $guest_contact = $_POST['guest_contact'];
-  $guest_address = $_POST['guest_address'];
-  $guest_city = $_POST['guest_city'];
-
-
-  //insert query
-  $insert_query = "insert into guest (Telephone_No, Street_Address, City) values
-   ('$guest_contact', '$guest_address', '$guest_city')";
-  
-  $sql_execute = mysqli_query($adminconnection, $insert_query);
-  if(!$sql_execute){
-    die(mysqli_error($adminconnection));	
-  }
-}
-?>

@@ -105,16 +105,16 @@ function view_product_details(){
   // checking whether the category is set or not
   if(isset($_GET['product_id'])){
     $product_id = $_GET['product_id'];
-  $select_products = "Select * from product where Product_ID=$product_id";
-  $result_products = mysqli_query($adminconnection, $select_products);
-  while($row_data = mysqli_fetch_assoc($result_products)){
-    $Product_ID = $row_data['Product_ID'];
-    $SKU = $row_data['SKU'];
-    $Title = $row_data['Title'];
-    $Weight = $row_data['Weight'];
-    $Category_ID = $row_data['Category_ID'];
-    $Subcategory_ID = $row_data['Subcategory_ID'];
-    $Image = $row_data['Image'];
+    $select_products = "Select * from product where Product_ID=$product_id";
+    $result_products = mysqli_query($adminconnection, $select_products);
+    while($row_data = mysqli_fetch_assoc($result_products)){
+      $Product_ID = $row_data['Product_ID'];
+      $SKU = $row_data['SKU'];
+      $Title = $row_data['Title'];
+      $Weight = $row_data['Weight'];
+      $Category_ID = $row_data['Category_ID'];
+      $Subcategory_ID = $row_data['Subcategory_ID'];
+      $Image = $row_data['Image'];
 
     echo " <div class='container mt-5'>
     <section class='p-5 bg-light text-dark' id='info'>
@@ -135,24 +135,52 @@ function view_product_details(){
               maxime labore deserunt quasi at autem natus veritatis quia
               voluptas nam!
             </p>
-            <p class='lead mb-1'>Product Variant:</p>
-            <select
+
+            ";
+          }
+          $select_varients = "Select * from product_variant, variant where product_variant.Variant_ID = variant.Varient_ID AND Product_ID=$product_id";
+          $result_varients = mysqli_query($adminconnection, $select_varients);
+          $prev_Attribute = '';
+          while($row_data = mysqli_fetch_assoc($result_varients)){
+            $Varient_ID = $row_data['Variant_ID'];
+            $Attribute = $row_data['Attribute'];
+            $Value = $row_data['Value'];
+            if($prev_Attribute==''){
+              echo"<p class='lead mb-1'>$Attribute</p>
+              <select required
               class='form-select mb-3'
               aria-label='Default select example'
-            >
-              <option selected>Select Variant</option>
-              <option value='1'>Variant 1</option>
-              <option value='2'>Variant 2</option>
-            </select>
-            <a href='#' class='btn btn-secondary mt-3'>Add to Cart</a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div> ";
+              >
+              <option value=''>Select $Attribute</option>
+              <option value=$Varient_ID>$Value</option>
+              }";
+              $prev_Attribute = $Attribute;
+            }
+            elseif($Attribute != $prev_Attribute){
+              echo"</select><p class='lead mb-1'>$Attribute</p>
+                <select required
+                class='form-select mb-3'
+                aria-label='Default select example'
+                >
+                <option value=''>Select $Attribute</option>
+                <option value=$Varient_ID>$Value</option>
+                }";
+                $prev_Attribute = $Attribute;
+              }
+              else{
+                echo"<option value=$Varient_ID>$Value</option>";
+              }
+
+          }
+  echo "</select><a href='CartPage.php' class='btn btn-secondary mt-3'>Add to Cart</a>
+  </div>
+</div>
+</div>
+</section>
+</div> ";
 
   
-}
+
   
 }  
 }
