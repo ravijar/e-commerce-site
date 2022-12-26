@@ -3,7 +3,7 @@ include('../client/inc/header.php');
 
 ?>
 <div>
-  <section class="hero-section">
+  <section class="hero-section text-center">
     <div class="bkg"></div>
     <div class="container h-100 d-flex w-25">
       <div class="pt-5 mt-5">
