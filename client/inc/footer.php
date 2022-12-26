@@ -1,7 +1,8 @@
-</div>  
-    <footer class="text-center mt-5">
-        All rights reserved &copy; 2022
-    </footer>
- 
-    </body>
+</div>
+<footer class="bg-dark text-center text-light">
+    <div class="text-center p-3 text-secondary" style="background-color: rgba(0, 0, 0, 0.3)">
+        Copyright &copy; 2022 My Shop
+    </div>
+</footer>
+</body>
 </html>
