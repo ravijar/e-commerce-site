@@ -9,7 +9,7 @@ include('../client/inc/header.php');
       <div class="pt-5 mt-5">
         <h1 class="fs-1 text-primary py-4 fw-bold">Welcome to Kade.lk</h1>
         <p class="lead text-light">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores quas laborum a quam consequatur quisquam tenetur iusto esse dolores laudantium.</p>
-        <a class="btn btn-lg btn-outline-success fw-bold mt-2" href="#/home"> Start Shopping</a>
+        <a class="btn btn-lg btn-outline-success fw-bold mt-2" href="#productSection"> Start Shopping</a>
       </div>
     </div>
   </section>
