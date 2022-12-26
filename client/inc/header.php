@@ -20,7 +20,7 @@ include('../functions/common_functions.php');
     <nav class="navbar navbar-dark navbar-expand bg-dark p-2">
       <div class="container-fluid px-3">
         <a href="index.php" class="navbar-brand" 
-          ><span class="mb-0 h1">My Shop</span></a
+          ><span class="mb-0 h1">Kade.lk</span></a
         >
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
           <ul class="navbar-nav ms-auto me-5">
