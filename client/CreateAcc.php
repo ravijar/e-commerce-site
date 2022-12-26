@@ -82,6 +82,8 @@ if(isset($_POST['user_register'])){
         $sql_execute = mysqli_query($adminconnection, $insert_query);
         if($sql_execute){
           echo "<script>alert('Data inserted successfully.')</script>";
+          echo"<script>location.href='LoginPage.php'</script>";
+
         }else{
           die(mysqli_error($adminconnection));	
         } 
