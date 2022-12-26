@@ -2,48 +2,6 @@
 include('../client/inc/header.php');
 ?>
 
-<?php
-
-if(isset($_POST['user_register'])){
-    $user_username = $_POST['user_username'];
-    $user_password = $_POST['user_password'];
-    $hash_password = password_hash($user_password, PASSWORD_DEFAULT);
-    $user_confirm_password = $_POST['user_confirm_password'];
-    $user_firstname = $_POST['user_firstname'];
-    $user_lastname = $_POST['user_lastname'];
-    $user_contact = $_POST['user_contact'];
-    $user_address = $_POST['user_address'];
-    $user_city = $_POST['user_city'];
-
-    //select query
-
-    $select_query = "Select * from user where User_name='$user_username'";
-    $result = mysqli_query($adminconnection, $select_query);
-    $row_count = mysqli_num_rows($result);
-    if($row_count>0){
-      echo "<script>alert('Username already exists.')</script>"; 
-    }
-    else if($user_password != $user_confirm_password){
-      echo "<script>alert('Passwords do not match.')</script>";
-    }
-    else{
-      //insert query
-      $insert_query = "insert into user (User_Name, Password, First_Name, Last_Name, Telephone_No, Street_Address,
-      City) values ('$user_username', '$hash_password', '$user_firstname', '$user_lastname', '$user_contact',
-      '$user_address', '$user_city')";
-      
-      $sql_execute = mysqli_query($adminconnection, $insert_query);
-      if($sql_execute){
-        echo "<script>alert('Data inserted successfully.')</script>";
-      }else{
-        die(mysqli_error($adminconnection));	
-      }
-    }
-
-}
-
-?>
-
 
 <body>
   <div class="container">
