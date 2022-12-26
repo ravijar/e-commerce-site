@@ -5,7 +5,7 @@ include('../client/inc/header.php');
 
 if(isset($_POST['user_login'])){
   $user_username = $user_password = '';
-  $error_username = $error_password = '';
+  $error_username = $error_password = $error_credentials = '';
 
   if(!empty($_POST['user_username'])){
     $user_username = filter_input(INPUT_POST,'user_username',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -23,18 +23,19 @@ if(isset($_POST['user_login'])){
   $result = mysqli_query($adminconnection, $select_query);
   $row_count = mysqli_num_rows($result);
   $row_data = mysqli_fetch_assoc($result);
-  if($row_count>0){
-    if(!empty($user_username) && !empty($user_password)){
+  if(!empty($user_username) && !empty($user_password)){
+    if($row_count>0){
       if(password_verify($user_password, $row_data['Password'])){
+        $error_credentials = '';
         echo "<script>alert('Login successful.')</script>";
         header('Location: checkoutPage.php');
       }else{
-        echo "<script>alert('Invalid Credentails.')</script>"; 
+        $error_credentials = 'Invalid Credentials!'; 
       }
-    } 
-  }else{
-    echo "<script>alert('Invalid Credentails.')</script>"; 
-  }
+    }else{
+        $error_credentials = 'Invalid Credentials!';
+    }
+  } 
 }
 
 if(isset($_POST['guest_login'])){
@@ -117,7 +118,10 @@ if(isset($_POST['guest_login'])){
                 </div>
               </div>
               <div class="mb-3"></div>
-              <input type = "submit" value="Sign in" class="btn btn-primary " name="user_login">
+              <input type = "submit" value="Sign in" class="btn  <?php echo $error_credentials ? 'btn-danger is-invalid':'btn-primary'; ?>" name="user_login">
+              <div class="invalid-feedback">
+                  <?php echo $error_credentials; ?>
+                </div>
             </form>
             <p class="dropdown-item"
               >Don't have an account ? <a href="CreateAcc.php">Create Account</a></p
