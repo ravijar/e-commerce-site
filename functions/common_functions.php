@@ -95,7 +95,7 @@ function get_categories(){
     while($row_data = mysqli_fetch_assoc($result_categories)){
       $category_name = $row_data['Category_Name'];
       $category_id = $row_data['Category_ID'];
-      echo "<li><a href='index.php?category=$category_id' class='dropdown-item'>$category_name</a></li>";
+      echo "<li><a href='ProductsPage.php?category=$category_id' class='dropdown-item'>$category_name</a></li>";
     }
 }
 
