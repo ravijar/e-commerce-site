@@ -43,9 +43,9 @@ if(isset($_POST['guest_login'])){
 }
 ?>
   <div class="container mt-5">
-    <caption class="h1 mb-3">
+    <span class="h1 mb-3 text-secondary">
       Checkout
-    </caption>
+</span>
     <div class="createAcc d-flex justify-content-around my-5">
       <div class="card py-3 px-3 w-50 text-start">
         <table class="table caption-top mb-4">
