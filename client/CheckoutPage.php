@@ -2,46 +2,7 @@
 include('../client/inc/header.php');
 
 ?>
-<?php
 
-if(isset($_POST['user_login'])){
-  $user_username = $_POST['user_username'];
-  $user_password = $_POST['user_password'];
-
-  $select_query = "Select * from user where User_Name = '$user_username'";
-  $result = mysqli_query($adminconnection, $select_query);
-  $row_count = mysqli_num_rows($result);
-  $row_data = mysqli_fetch_assoc($result);
-  if($row_count>0){
-    if(password_verify($user_password, $row_data['Password'])){
-      echo "<script>alert('Login successful.')</script>";
-    }else{
-      echo "<script>alert('Invalid Credentails.')</script>"; 
-      echo"<script>location.href='LoginPage.php'</script>";
-    }
-  }else{
-    echo "<script>alert('Invalid Credentails.')</script>"; 
-    echo"<script>location.href='LoginPage.php'</script>";
-    
-  }
-}
-
-if(isset($_POST['guest_login'])){
-  $guest_contact = $_POST['guest_contact'];
-  $guest_address = $_POST['guest_address'];
-  $guest_city = $_POST['guest_city'];
-
-
-  //insert query
-  $insert_query = "insert into guest (Telephone_No, Street_Address, City) values
-   ('$guest_contact', '$guest_address', '$guest_city')";
-  
-  $sql_execute = mysqli_query($adminconnection, $insert_query);
-  if(!$sql_execute){
-    die(mysqli_error($adminconnection));	
-  }
-}
-?>
   <div class="container mt-5">
     <span class="h1 mb-3 text-secondary">
       Checkout
