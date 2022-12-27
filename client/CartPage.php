@@ -57,7 +57,7 @@ include('../client/inc/header.php');
     </div>
     <div class="d-flex flex-row w-100 justify-content-between">
       <div class="align-self-center ms-5">
-        <a href="" class="lead text-decoration-none fw-light">Continue Shopping</a>
+        <a href="index.php#productSection" class="lead text-decoration-none fw-light">Continue Shopping</a>
       </div>
       <div>
         <a href='LoginPage.php' class='btn btn-primary'>Checkout</a>
