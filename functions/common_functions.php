@@ -22,18 +22,21 @@ function get_products(){
       $Image = $row_data['Image'];
 
       echo "<div class='col-lg-3 col-md-6'>
-          <div class='card'>
-          <img src='../Admin/Product_Images/$Image' class='mb-3 card-img-top img-fluid'
-          />
-        <div class='card-body'>
-          <h5 class='card-title'>$Title</h5>
-          <!--<p class='card-text text-start'>
-            Some quick example text to build on the card title and make up
-            the bulk of the card's content.
-          </p>-->
-          <a href='../client/ProductPage.php?product_id=$Product_ID' class='btn btn-secondary'>View More</a>
-        </div>
-      </div>
+      <div class='card py-2 bg-dark text-light text-center'>
+      <div class='card-title h3'>$Title</div>
+    <img
+      src='../Admin/Product_Images/$Image'
+      class='card-img-top img-fluid'
+    />
+    <div class='card-body'>
+      <div class='card-title h4 mb-3'>500 LKR</div>
+      <a
+        href='../client/ProductPage.php?product_id=$Product_ID'
+        class='btn btn-secondary'
+        >View More</a
+      >
+    </div>
+    </div>
     </div>";
 
     
@@ -68,18 +71,21 @@ function get_unique_category(){
       $Image = $row_data['Image'];
 
       echo "<div class='col-lg-3 col-md-6'>
-          <div class='card'>
-          <img src='../Admin/Product_Images/$Image' class='mb-3 card-img-top img-fluid'
-          />
-        <div class='card-body'>
-          <h5 class='card-title'>$Title</h5>
-          <!--<p class='card-text text-start'>
-            Some quick example text to build on the card title and make up
-            the bulk of the card's content.
-          </p>-->
-          <a href='../client/ProductPage.php?product_id=$Product_ID' class='btn btn-secondary'>View More</a>
-        </div>
-      </div>
+      <div class='card py-2 bg-dark text-light text-center'>
+      <div class='card-title h3'>$Title</div>
+    <img
+      src='../Admin/Product_Images/$Image'
+      class='card-img-top img-fluid'
+    />
+    <div class='card-body'>
+      <div class='card-title h4 mb-3'>500 LKR</div>
+      <a
+        href='../client/ProductPage.php?product_id=$Product_ID'
+        class='btn btn-secondary'
+        >View More</a
+      >
+    </div>
+    </div>
     </div>";
 
     }  
