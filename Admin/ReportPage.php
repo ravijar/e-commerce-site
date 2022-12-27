@@ -4,6 +4,16 @@
   $sql = 'SELECT Order_ID,Date_Of_Order,First_Name,Last_Name,Total_Value FROM `order`,`user`,`cart` WHERE `order`.User_ID = `user`.User_ID AND `order`.Cart_ID = `cart`.Cart_ID AND `order`.Guest_ID IS NULL;';
   $result = mysqli_query($adminconnection,$sql);
   $customer_order_report = mysqli_fetch_all($result,MYSQLI_ASSOC);
+
+  $sql = 'SELECT min(Date_Of_Order) FROM `order`;';
+  $result = mysqli_query($adminconnection,$sql);
+  $min_date = strtotime(mysqli_fetch_all($result,MYSQLI_ASSOC)[0]['min(Date_Of_Order)']) ;
+  $min_year = date('Y',$min_date);
+  $max_year = date('Y');
+
+  $sql = 'SELECT Product_ID,Title FROM `product`;';
+  $result = mysqli_query($adminconnection,$sql);
+  $products = mysqli_fetch_all($result,MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -32,8 +42,9 @@
                     aria-label="Default select example"
                   >
                     <option selected>Select Year</option>
-                    <option value="1">Variant 1</option>
-                    <option value="2">Variant 2</option>
+                    <?php for($i=$min_year;$i<=$max_year;$i++): ?>
+                      <option value=<?php echo $i; ?>><?php echo $i; ?></option>
+                    <?php endfor; ?>
                   </select>
                   </div>
                   <div>
@@ -43,8 +54,10 @@
                     aria-label="Default select example"
                   >
                     <option selected>Select Quarter</option>
-                    <option value="1">Variant 1</option>
-                    <option value="2">Variant 2</option>
+                    <option value="1">First Quater</option>
+                    <option value="2">Second Quater</option>
+                    <option value="1">Third Quater</option>
+                    <option value="2">Fourth Quater</option>
                   </select>
                   </div>
                 </div>
@@ -108,16 +121,27 @@
             <div class="d-flex flex-row gap-2">
               <div>
                 <select class="form-select" aria-label="Default select example">
-                  <option selected>Select Year</option>
-                  <option value="1">Variant 1</option>
-                  <option value="2">Variant 2</option>
+                <option selected>Select Year</option>
+                    <?php for($i=$min_year;$i<=$max_year;$i++): ?>
+                      <option value=<?php echo $i; ?>><?php echo $i; ?></option>
+                    <?php endfor; ?>
                 </select>
               </div>
               <div>
                 <select class="form-select" aria-label="Default select example">
                   <option selected>Select Month</option>
-                  <option value="1">Variant 1</option>
-                  <option value="2">Variant 2</option>
+                  <option value="1">January</option>
+                  <option value="2">February</option>
+                  <option value="3">March</option>
+                  <option value="4">April</option>
+                  <option value="5">May</option>
+                  <option value="6">June</option>
+                  <option value="7">July</option>
+                  <option value="8">August</option>
+                  <option value="9">September</option>
+                  <option value="10">October</option>
+                  <option value="11">November</option>
+                  <option value="12">December</option>
                 </select>
               </div>
               <div>
@@ -134,16 +158,27 @@
             <div class="d-flex flex-row gap-2">
               <div>
                 <select class="form-select" aria-label="Default select example">
-                  <option selected>Select Year</option>
-                  <option value="1">Variant 1</option>
-                  <option value="2">Variant 2</option>
+                <option selected>Select Year</option>
+                    <?php for($i=$min_year;$i<=$max_year;$i++): ?>
+                      <option value=<?php echo $i; ?>><?php echo $i; ?></option>
+                    <?php endfor; ?>
                 </select>
               </div>
               <div>
                 <select class="form-select" aria-label="Default select example">
                   <option selected>Select Month</option>
-                  <option value="1">Variant 1</option>
-                  <option value="2">Variant 2</option>
+                  <option value="1">January</option>
+                  <option value="2">February</option>
+                  <option value="3">March</option>
+                  <option value="4">April</option>
+                  <option value="5">May</option>
+                  <option value="6">June</option>
+                  <option value="7">July</option>
+                  <option value="8">August</option>
+                  <option value="9">September</option>
+                  <option value="10">October</option>
+                  <option value="11">November</option>
+                  <option value="12">December</option>
                 </select>
               </div>
               <div>
@@ -161,8 +196,9 @@
               <div>
                 <select class="form-select" aria-label="Default select example">
                   <option selected>Select Product</option>
-                  <option value="1">Variant 1</option>
-                  <option value="2">Variant 2</option>
+                  <?php foreach($products as $product): ?>
+                    <option value=<?php echo $product['Product_ID'] ?>><?php echo $product['Title'] ?></option>
+                  <?php endforeach; ?>
                 </select>
               </div>
               <div>
