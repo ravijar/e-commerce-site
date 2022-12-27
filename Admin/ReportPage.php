@@ -1,3 +1,11 @@
+<?php include('../Database/DatabaseConnection.php'); ?>
+
+<?php
+  $sql = 'SELECT Order_ID,Date_Of_Order,First_Name,Last_Name,Total_Value FROM `order`,`user`,`cart` WHERE `order`.User_ID = `user`.User_ID AND `order`.Cart_ID = `cart`.Cart_ID AND `order`.Guest_ID IS NULL;';
+  $result = mysqli_query($adminconnection,$sql);
+  $customer_order_report = mysqli_fetch_all($result,MYSQLI_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,31 +83,20 @@
               <thead>
                 <tr>
                   <th scope="col">Date</th>
-                  <th scope="col">Order No.</th>
                   <th scope="col">Customer</th>
+                  <th scope="col">Order ID</th>
+                  <th scope="col">Total</th> 
                 </tr>
               </thead>
               <tbody>
+                <?php foreach($customer_order_report as $report): ?>
                 <tr>
-                  <th scope="row">1</th>
-                  <td>I Phone</td>
-                  <td>100</td>
+                  <th><?php echo $report['Date_Of_Order'];?></th>
+                  <td><?php echo $report['First_Name'].' '.$report['Last_Name'];?></td>
+                  <td><?php echo $report['Order_ID'];?></td>
+                  <td><?php echo $report['Total_Value'];?></td>
                 </tr>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>I Phone</td>
-                  <td>100</td>
-                </tr>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>I Phone</td>
-                  <td>100</td>
-                </tr>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>I Phone</td>
-                  <td>100</td>
-                </tr>
+                <?php endforeach; ?>
               </tbody>
             </table>
           </div>
