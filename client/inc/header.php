@@ -24,6 +24,9 @@ include('../functions/common_functions.php');
         >
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
           <ul class="navbar-nav ms-auto me-5">
+            <li class="nav-item">
+              <a href="cartPage.php" class="nav-link">Cart</a>
+            </li>
             <li class="nav-item dropdown">
               <a
                 class="nav-link dropdown-toggle"
