@@ -14,10 +14,3 @@
     height: 100vh;
     padding-top: 80px;
 }
-
-footer {
-    position: fixed;
-    left: 0px;
-    bottom: 0px;
-    width: 100%;
-}

@@ -15,7 +15,7 @@ include('../functions/common_functions.php');
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
   <div>
     <nav class="navbar navbar-dark navbar-expand bg-dark p-2">
       <div class="container-fluid px-3">

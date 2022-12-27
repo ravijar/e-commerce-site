@@ -184,4 +184,3 @@ function view_product_details(){
   
 }  
 }
-?>
