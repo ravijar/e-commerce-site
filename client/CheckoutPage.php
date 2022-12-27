@@ -11,7 +11,7 @@ include('../client/inc/header.php');
       <div class="createAcc d-flex gap-5 justify-content-around my-5">
         <div class="card bg-light pt-2 pb-3 px-4 w-50 text-start">
           <table class="table caption-top mb-4">
-            <caption class="mb-2">
+            <caption class="mb-2 fs-4">
               Order Summary
             </caption>
             <thead>
