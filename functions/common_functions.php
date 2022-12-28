@@ -20,7 +20,7 @@ function get_products(){
       $Category_ID = $row_data['Category_ID'];
       $Subcategory_ID = $row_data['Subcategory_ID'];
       $Image = $row_data['Image'];
-
+      
       echo "<div class='col-lg-3 col-md-6'>
       <div class='card py-2 bg-dark text-light text-center'>
       <div class='card-title h3'>$Title</div>
@@ -55,42 +55,54 @@ function get_unique_category(){
       echo"<div class='mt-5 container'>
       <div class='row g-4'>";
         $category_id = $_GET['category'];
+    $select_category_name = "Select Category_Name from category where Category_ID = $category_id"; 
+    $result_category_name = mysqli_query($adminconnection, $select_category_name); 
+    while($row_data = mysqli_fetch_assoc($result_category_name)){
+      $category_name = $row_data['Category_Name'];
+    }  
+    
     $select_products = "Select * from product where Category_ID = $category_id";
     $result_products = mysqli_query($adminconnection, $select_products);
     $row_count = mysqli_num_rows($result_products);
+    echo "<div class='text-primary h5 fw-bold text-start py-1'>$category_name</div>";
     if($row_count==0){
         echo "<h2 class='text-danger'>Stocks are unavailable.</h2>";
     }
-    while($row_data = mysqli_fetch_assoc($result_products)){
-      $Product_ID = $row_data['Product_ID'];
-      $SKU = $row_data['SKU'];
-      $Title = $row_data['Title'];
-      $Weight = $row_data['Weight'];
-      $Category_ID = $row_data['Category_ID'];
-      $Subcategory_ID = $row_data['Subcategory_ID'];
-      $Image = $row_data['Image'];
-
-      echo "<div class='col-lg-3 col-md-6'>
-      <div class='card py-2 bg-dark text-light text-center'>
-      <div class='card-title h3'>$Title</div>
-    <img
-      src='../Admin/Product_Images/$Image'
-      class='card-img-top img-fluid'
-    />
-    <div class='card-body'>
-      <div class='card-title h4 mb-3'>500 LKR</div>
-      <a
-        href='../client/ProductPage.php?product_id=$Product_ID'
-        class='btn btn-secondary'
-        >View More</a
-      >
-    </div>
-    </div>
-    </div>";
-
-    }  
+    else{
+      
+      while($row_data = mysqli_fetch_assoc($result_products)){
+        $Product_ID = $row_data['Product_ID'];
+        $SKU = $row_data['SKU'];
+        $Title = $row_data['Title'];
+        $Weight = $row_data['Weight'];
+        $Category_ID = $row_data['Category_ID'];
+        $Subcategory_ID = $row_data['Subcategory_ID'];
+        $Image = $row_data['Image'];
+        
+        echo "<div class='col-lg-3 col-md-6'>
+        <div class='card py-2 bg-dark text-light text-center'>
+        <div class='card-title h3'>$Title</div>
+      <img
+        src='../Admin/Product_Images/$Image'
+        class='card-img-top img-fluid'
+      />
+      <div class='card-body'>
+        <div class='card-title h4 mb-3'>500 LKR</div>
+        <a
+          href='../client/ProductPage.php?product_id=$Product_ID'
+          class='btn btn-secondary'
+          >View More</a
+        >
+      </div>
+      </div>
+      </div>";
+  
+      }  
+      
+    }
     echo"</div>
-  </div>";   
+    </div>";  
+     
 }
 }
 // getting categories from database and display categories in drop down menu in home page
