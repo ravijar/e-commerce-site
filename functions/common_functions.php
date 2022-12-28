@@ -105,7 +105,7 @@ function get_categories(){
     }
 }
 
-function view_product_details(){
+function    view_product_details(){
   global $adminconnection;
 
   // checking whether the category is set or not

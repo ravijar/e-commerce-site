@@ -5,18 +5,18 @@ include('../client/inc/header.php');
 <div>
   <section class="hero-section text-center">
     <div class="bkg"></div>
-    <div class="container h-100 d-flex w-25">
+    <div class="h-100 d-flex w-50 justify-content-center align-self-center ms-auto me-auto">
       <div class="pt-5 mt-5">
-        <h1 class="fs-1 text-primary py-4 fw-bold">Welcome to Kade.lk</h1>
-        <p class="lead text-light">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores quas laborum a quam consequatur quisquam tenetur iusto esse dolores laudantium.</p>
-        <a class="btn btn-lg btn-outline-success fw-bold mt-2" href="#productSection"> Start Shopping</a>
+        <div class="py-4 hero-header ">Welcome to Kade.lk</div>
+        <div class="h3 text-light hero-intro">Shop variety of items including Laptops, Mobile Phones, TVs at the Lowest Price</div>
+        <a class="btn btn-lg btn-outline-warning hero-button fw-bold mt-2" href="#productSection"> Start Shopping</a>
       </div>
     </div>
   </section>
 </div>
 
 <div class="container pb-5 mb-5" id="productSection">
-  <div class="text-primary h1 fw-bold text-start py-4">Our Products</div>
+  <div class="text-black h1 fw-bold text-start py-4">Our Products</div>
 
 
 
