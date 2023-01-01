@@ -24,6 +24,9 @@
     margin-left: 20px;
     margin-right: 20px;
 }
+.hero-text{
+    margin-top: 10%;
+}
 .hero-section {
     height: 100vh;
     position: relative;
