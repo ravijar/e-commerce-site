@@ -6,7 +6,6 @@ include('../client/inc/header.php');
       view_product_details();
     ?>
 
-
 <?php 
   include('../client/inc/footer.php');
 ?>
