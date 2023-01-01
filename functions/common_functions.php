@@ -162,7 +162,7 @@ function    view_product_details(){
             ";
           }
           $iteration = 0;
-          $select_varients = "Select * from product_variant, variant where product_variant.Variant_ID = variant.Varient_ID AND Product_ID=$product_id";
+          $select_varients = "Select * from product_variant, variant where product_variant.Variant_ID = variant.Variant_ID AND Product_ID=$product_id";
           $result_varients = mysqli_query($adminconnection, $select_varients);
           
           while($row_data = mysqli_fetch_assoc($result_varients)){
