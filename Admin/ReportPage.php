@@ -1,19 +1,90 @@
 <?php include('../Database/DatabaseConnection.php'); ?>
+<?php
+  $months = [
+    1=>'January',
+    2=>'February',
+    3=>'March',
+    4=>'April',
+    5=>'May',
+    6=>'June',
+    7=>'July',
+    8=>'August',
+    9=>'September',
+    10=>'October',
+    11=>'November',
+    12=>'December',
+  ];
+?>
 
 <?php
+  // customer order report
   $sql = 'SELECT Order_ID,Date_Of_Order,First_Name,Last_Name,Total_Value FROM `order`,`user`,`cart` WHERE `order`.User_ID = `user`.User_ID AND `order`.Cart_ID = `cart`.Cart_ID AND `order`.Guest_ID IS NULL;';
   $result = mysqli_query($adminconnection,$sql);
   $customer_order_report = mysqli_fetch_all($result,MYSQLI_ASSOC);
 
+  // year for dropdowns
   $sql = 'SELECT min(Date_Of_Order) FROM `order`;';
   $result = mysqli_query($adminconnection,$sql);
   $min_date = strtotime(mysqli_fetch_all($result,MYSQLI_ASSOC)[0]['min(Date_Of_Order)']) ;
   $min_year = date('Y',$min_date);
   $max_year = date('Y');
 
+  // products for dropdowns
   $sql = 'SELECT Product_ID,Title FROM `product`;';
   $result = mysqli_query($adminconnection,$sql);
   $products = mysqli_fetch_all($result,MYSQLI_ASSOC);
+
+  // product with most number of sales
+  $year1 = $month1 = '';
+  $search1_set = false;
+  if(isset($_POST['search1'])){
+    if(count($_POST) == 3){
+      $year1 = $_POST['year1'];
+      $month1 = $_POST['month1'];
+      $search1_set = true;
+    }
+  }
+  $sql =$adminconnection->prepare("select Title from product where Product_ID in(
+    select Product_ID from product_variant as pv inner join(
+    select Variant_ID,sum(Quantity) as q from `cart_item` where Cart_ID in(
+    select Cart_ID from `order` where year(Date_Of_Order) = ? and month(Date_Of_Order) = ?
+    ) group by Variant_ID order by q desc limit 1)
+    as v on pv.Variant_ID = v.Variant_ID);") ;
+  $sql->bind_param("ss",$year1,$month1);
+  $sql->execute();
+  $result = $sql->get_result();
+  $product  = $result->fetch_assoc();
+  if(empty($product)){
+    $search1_set = false;
+  }
+
+  // product category with most orders
+  $year2 = $month2 = '';
+  $search2_set = false;
+  if(isset($_POST['search2'])){
+    if(count($_POST) == 3){
+      $year2 = $_POST['year2'];
+      $month2 = $_POST['month2'];
+      $search2_set = true;
+    }
+  }
+  $sql =$adminconnection->prepare("select Category_Name from `category` as c inner join(
+    select Category_ID,sum(Quantity) as q from `cart_item`,`product_variant`,`product` 
+    where `cart_item`.Variant_ID = `product_variant`.Variant_ID
+    and `product_variant`.Product_ID = `product`.Product_ID 
+    and Cart_ID in(
+      select Cart_ID from `order`
+        where year(Date_Of_Order) = ? and month(Date_Of_Order) = ?
+    ) group by Category_ID order by q desc limit 1)
+    as cid on cid.Category_ID = c.Category_ID;") ;
+  $sql->bind_param("ss",$year2,$month2);
+  $sql->execute();
+  $result = $sql->get_result();
+  $category  = $result->fetch_assoc();
+  if(empty($category)){
+    $search2_set = false;
+  }
+
 ?>
 
 <!DOCTYPE html>
@@ -119,83 +190,80 @@
           <div class="p-3 bd-highlight card bg-light text-black d-flex flex-column gap-2">
             <div class="h4 mb-3">Product with most number of sales</div>
             <div class="d-flex flex-row gap-2">
-              <div>
-                <select class="form-select" aria-label="Default select example">
-                <option selected>Select Year</option>
+            <form class="form-inline" method = "POST">
+              <div class="form-group">
+                <select class="form-select form-control" aria-label="Default select example" name="year1">
+                <option selected disabled>Select Year</option>
                     <?php for($i=$min_year;$i<=$max_year;$i++): ?>
                       <option value=<?php echo $i; ?>><?php echo $i; ?></option>
                     <?php endfor; ?>
                 </select>
               </div>
-              <div>
-                <select class="form-select" aria-label="Default select example">
-                  <option selected>Select Month</option>
-                  <option value="1">January</option>
-                  <option value="2">February</option>
-                  <option value="3">March</option>
-                  <option value="4">April</option>
-                  <option value="5">May</option>
-                  <option value="6">June</option>
-                  <option value="7">July</option>
-                  <option value="8">August</option>
-                  <option value="9">September</option>
-                  <option value="10">October</option>
-                  <option value="11">November</option>
-                  <option value="12">December</option>
+              <div class="form-group">
+                <select class="form-select form-control" aria-label="Default select example" name="month1">
+                  <option selected disabled>Select Month</option>
+                  <?php for($i=1;$i<=12;$i++): ?>
+                      <option value=<?php echo $i; ?>><?php echo $months[$i]; ?></option>
+                  <?php endfor; ?>
                 </select>
               </div>
-              <div>
-                <button class="btn btn-warning">Search</button>
+              <div class="form-group">
+                <button class="btn btn-warning" name="search1">Search</button>
               </div>
+              </form>
             </div>
             <div>
-              <span>Product: </span>
-              <span class="text-warning fw-bold">Answer</span>
+              <?php if($search1_set): ?>
+              <span><?php echo "$year1 $months[$month1] :" ?></span>
+              <span class="text-warning fw-bold"><?php echo $product['Title']; ?></span>
+              <?php else: ?>
+              <span class="text-warning fw-bold"><?php echo 'No sales in the selected period!'; ?><span>  
+              <?php endif; ?>
             </div>
           </div>
+
+          <div class="d-flex flex-column bd-highlight mb-3 text-start lead gap-2">
           <div class="p-3 bd-highlight card bg-light text-black d-flex flex-column gap-2">
             <div class="h4 mb-3">Product category with most orders</div>
             <div class="d-flex flex-row gap-2">
-              <div>
-                <select class="form-select" aria-label="Default select example">
-                <option selected>Select Year</option>
+            <form class="form-inline" method = "POST">
+              <div class="form-group">
+                <select class="form-select form-control" aria-label="Default select example" name="year2">
+                <option selected disabled>Select Year</option>
                     <?php for($i=$min_year;$i<=$max_year;$i++): ?>
                       <option value=<?php echo $i; ?>><?php echo $i; ?></option>
                     <?php endfor; ?>
                 </select>
               </div>
-              <div>
-                <select class="form-select" aria-label="Default select example">
-                  <option selected>Select Month</option>
-                  <option value="1">January</option>
-                  <option value="2">February</option>
-                  <option value="3">March</option>
-                  <option value="4">April</option>
-                  <option value="5">May</option>
-                  <option value="6">June</option>
-                  <option value="7">July</option>
-                  <option value="8">August</option>
-                  <option value="9">September</option>
-                  <option value="10">October</option>
-                  <option value="11">November</option>
-                  <option value="12">December</option>
+              <div class="form-group">
+                <select class="form-select form-control" aria-label="Default select example" name="month2">
+                  <option selected disabled>Select Month</option>
+                  <?php for($i=1;$i<=12;$i++): ?>
+                      <option value=<?php echo $i; ?>><?php echo $months[$i]; ?></option>
+                  <?php endfor; ?>
                 </select>
               </div>
-              <div>
-                <button class="btn btn-warning">Search</button>
+              <div class="form-group">
+                <button class="btn btn-warning" name="search2">Search</button>
               </div>
+              </form>
             </div>
             <div>
-              <span>Category: </span>
-              <span class="text-warning fw-bold">Answer</span>
+              <?php if($search2_set): ?>
+              <span><?php echo "$year2 $months[$month2] :" ?></span>
+              <span class="text-warning fw-bold"><?php echo $category['Category_Name']; ?></span>
+              <?php else: ?>
+              <span class="text-warning fw-bold"><?php echo 'No orders in the selected period!'; ?><span>  
+              <?php endif; ?>
             </div>
           </div>
+
           <div class="p-3 bd-highlight card bg-light text-black d-flex flex-column gap-2">
             <div class="h4 mb-3">Time period with most interest to a product</div>
             <div class="d-flex flex-row gap-2">
               <div>
                 <select class="form-select" aria-label="Default select example">
-                  <option selected>Select Product</option>
+                  <option selected disabled>Select Product</option>
                   <?php foreach($products as $product): ?>
                     <option value=<?php echo $product['Product_ID'] ?>><?php echo $product['Title'] ?></option>
                   <?php endforeach; ?>
