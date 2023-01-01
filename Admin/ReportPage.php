@@ -33,6 +33,10 @@
   $sql = 'SELECT Product_ID,Title FROM `product`;';
   $result = mysqli_query($adminconnection,$sql);
   $products = mysqli_fetch_all($result,MYSQLI_ASSOC);
+  $products_dict = [];
+  foreach($products as $product){
+    $products_dict[$product['Product_ID']]=$product['Title'];
+  }
 
   // product with most number of sales
   $year1 = $month1 = '';
@@ -83,6 +87,31 @@
   $category  = $result->fetch_assoc();
   if(empty($category)){
     $search2_set = false;
+  }
+
+  // Time period with most interest to a product
+  $selected_product = '';
+  $search3_set = false;
+  if(isset($_POST['search3'])){
+    if(count($_POST) == 2){
+      $selected_product = $_POST['Product_ID'];
+      $search3_set = true;
+    }
+  }
+  $sql =$adminconnection->prepare("select count(Date_Of_Order) as count,
+  year(Date_Of_Order) as year,
+  month(Date_Of_Order) as month,
+  extract(year_month from Date_Of_Order) as period
+  from `order` where Cart_ID in(
+    select Cart_ID from `cart_item` where Variant_ID in(
+      select Variant_ID from `product_variant` where Product_ID = ?)
+  ) group by period order by count desc limit 1;") ;
+  $sql->bind_param("s",$selected_product);
+  $sql->execute();
+  $result = $sql->get_result();
+  $time  = $result->fetch_assoc();
+  if(empty($time)){
+    $search3_set = false;
   }
 
 ?>
@@ -261,21 +290,27 @@
           <div class="p-3 bd-highlight card bg-light text-black d-flex flex-column gap-2">
             <div class="h4 mb-3">Time period with most interest to a product</div>
             <div class="d-flex flex-row gap-2">
-              <div>
-                <select class="form-select" aria-label="Default select example">
+            <form class="form-inline" method = "POST">
+              <div class="form-group">
+                <select class="form-select" aria-label="Default select example" name="Product_ID">
                   <option selected disabled>Select Product</option>
-                  <?php foreach($products as $product): ?>
-                    <option value=<?php echo $product['Product_ID'] ?>><?php echo $product['Title'] ?></option>
+                  <?php foreach($products_dict as $key=>$value): ?>
+                    <option value=<?php echo $key ?>><?php echo $value ?></option>
                   <?php endforeach; ?>
                 </select>
               </div>
-              <div>
-                <button class="btn btn-warning">Search</button>
+              <div class="form-group">
+                <button class="btn btn-warning" name="search3">Search</button>
               </div>
+            </form>
             </div>
             <div>
-              <span>Month: </span>
-              <span class="text-warning fw-bold">Answer</span>
+            <?php if($search3_set): ?>
+              <span><?php echo "{$products_dict[$selected_product]} :" ?></span>
+              <span class="text-warning fw-bold"><?php echo "{$time['year']} {$months[$time['month']]}" ; ?></span>
+              <?php else: ?>
+              <span class="text-warning fw-bold"><?php echo 'No interest for the selected product!'; ?><span>  
+              <?php endif; ?>
             </div>
           </div>
         </div>
