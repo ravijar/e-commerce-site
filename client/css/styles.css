@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap'); 
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@300&display=swap');
 .bkg {
-    
     position: absolute;
     top: 0;
     z-index: -1;
@@ -27,9 +26,12 @@
 }
 .hero-section {
     height: 100vh;
+    position: relative;
     padding-top: 80px;
     font-family: 'Anton', sans-serif;
+    overflow: hidden;
 }
+
 .hero-header{
     font-size: 6em;
     color: rgb(223, 168, 0);
