@@ -1,5 +1,32 @@
 <?php
+session_start();
 include('../client/inc/header.php');
+if(isset($_POST['add'])){
+   //print_r($_POST['VariantDetails']);
+  if(isset($_SESSION['cart'])){
+    $item_array_id = array_column($_SESSION['cart'],"VariantDetails");
+    // print_r($_SESSION['cart']);
+    if(in_array($_POST['VariantDetails'],$item_array_id)){
+      echo "<script>alert('Product is already added in the cart')</script>";
+    }
+    else{
+      $count = count($_SESSION['cart']);
+      $item_array = array(
+        'VariantDetails' => $_POST['VariantDetails']
+      );
+      $_SESSION['cart'][$count] = $item_array;
+      // print_r($_SESSION['cart']);
+    }
+  }
+  else{
+    $item_array = array(
+        'VariantDetails' => $_POST['VariantDetails']
+    );
+
+    $_SESSION['cart'][0] = $item_array;
+    print_r($_SESSION['cart']);
+  }
+}
 
 ?>
 <div class="container mt-5">
@@ -12,7 +39,7 @@ include('../client/inc/header.php');
       <thead>
         <tr>
           <th scope="col"></th>
-          <th scope="col">#</th>
+          <th scope="col">Product Number</th>
           <th scope="col">Item</th>
           <th scope="col">Unit Price(LKR)</th>
           <th scope="col">Units</th>
@@ -20,39 +47,38 @@ include('../client/inc/header.php');
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td><button class="btn btn-danger">Remove</button></td>
-          <th scope="row">1</th>
-          <td>I Phone</td>
-          <td>100</td>
-          <td>2</td>
-          <td>200</td>
-        </tr>
-
-        <tr>
-          <td><button class="btn btn-danger">Remove</button></td>
-          <th scope="row">1</th>
-          <td>I Phone</td>
-          <td>100</td>
-          <td>2</td>
-          <td>200</td>
-        </tr>
-
-        <tr>
-          <td><button class="btn btn-danger">Remove</button></td>
-          <th scope="row">1</th>
-          <td>I Phone</td>
-          <td>100</td>
-          <td>2</td>
-          <td>200</td>
-        </tr>
+        <?php
+        if(!empty($_SESSION['cart'])){
+          $varient_id = array_column($_SESSION['cart'],'VariantDetails');
+          $variant_count;
+         $variant_count=0;
+        if(!empty($varient_id)){
+          $cart_total = 0;
+          foreach($varient_id as $id){
+            $variant_count++;
+            $cart_total = load_cart_items($id,$variant_count,$cart_total);
+          }
+          
+        }
+        }
+        
+        
+        
+        ?>
       </tbody>
     </table>
   </div>
   <div class="d-flex me-5 align-items-end flex-column bd-highlight mb-3">
     <div class="py-3 fw-bold lead">
       <span class="bd-highlight ">Total: </span>
-      <span class="bd-highlight pb-3 ">5000</span>
+      <?php
+      if(!empty($_SESSION['cart'])){
+        echo "<span class='bd-highlight pb-3'>$cart_total</span> ";
+      }
+      else{
+        echo "<span class='bd-highlight pb-3'>0</span> ";
+      }
+       ?>
       <span class="bd-highlight pb-3 "> LKR</span>
     </div>
     <div class="d-flex flex-row w-100 justify-content-between">
