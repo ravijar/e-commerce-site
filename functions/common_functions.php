@@ -10,7 +10,7 @@ function get_products(){
     if(!isset($_GET['category'])){
       echo"<div class='mt-5 container'>
       <div class='row g-4'>";
-    $select_products = "Select * from product order by rand() limit 0,12";
+    $select_products = "Select * from product order by rand() limit 0,9";
     $result_products = mysqli_query($adminconnection, $select_products);
     while($row_data = mysqli_fetch_assoc($result_products)){
       $Product_ID = $row_data['Product_ID'];
@@ -272,7 +272,7 @@ function  view_product_details(){
               $varient_details=$varient_details.$Attribute . " : " . $Value.' , ';
               $iteration+=1;
             }
-            elseif($iteration==1 and $Attribute!='ZPrice'){
+            elseif($Attribute!='ZPrice'){
               $varient_details=$varient_details.$Attribute. " : " .$Value.' , ' ;
               $iteration+=1;
             }
@@ -325,7 +325,7 @@ function load_cart_items($varientID,$variant_count,$cart_total){
       $varient_details=$varient_details.$Title." ".$Attribute . " : " . $Value;
       $iteration+=1;
     }
-    elseif($iteration==1 and $Attribute!='ZPrice'){
+    elseif($Attribute!='ZPrice'){
       $varient_details=$varient_details.' , '.$Attribute. " : " .$Value ;
       $iteration+=1;
     }
