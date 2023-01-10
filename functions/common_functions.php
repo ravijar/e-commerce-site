@@ -10,7 +10,7 @@ function get_products(){
     if(!isset($_GET['category'])){
       echo"<div class='mt-5 container'>
       <div class='row g-4'>";
-    $select_products = "Select * from product order by rand() limit 0,9";
+    $select_products = "Select * from product order by rand() limit 0,12";
     $result_products = mysqli_query($adminconnection, $select_products);
     while($row_data = mysqli_fetch_assoc($result_products)){
       $Product_ID = $row_data['Product_ID'];
@@ -29,7 +29,7 @@ function get_products(){
       class='card-img-top img-fluid'
     />
     <div class='card-body'>
-      <div class='card-title h4 mb-3'>500 LKR</div>
+      <!-- <div class='card-title h4 mb-3'>500 LKR</div> -->
       <a
         href='../client/ProductPage.php?product_id=$Product_ID'
         class='btn btn-secondary'
