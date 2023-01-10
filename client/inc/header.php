@@ -17,10 +17,13 @@ include('../functions/common_functions.php');
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css" integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com"
-   crossorigin><link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@800&display=swap" rel="stylesheet">
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -29,43 +32,13 @@ include('../functions/common_functions.php');
       <div class="container-fluid px-3">
         <a href="index.php" class="navbar-brand nav-title"><span class="mb-0 h1">Kade.lk</span></a>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
-          
-          <ul class="navbar-nav ms-auto me-5">
-          <button class = "navbar-toggler"
-            type = "button"
-            data-toggle = "collapse"
-            data-target = "#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup"
-            aria-expanded="false"
-            aia-label="Toggle navigation">
-            <span class = "navbar-toggler-icon"></span>
-</button>
-<div class = "collapse navbar-collapse" id = "navbarNavAltMarkup">
-  <div class="mr-auto"></div>
-  <div class = "navbar-nav">
-    <a href = "cartPage.php" class = "nav-item nav-link active">
-      <h5 class = "px-5 cart">
-        <i class = "fas fa-shopping-cart"></i> Cart
-        <?php
-        if(isset($_SESSION['cart'])){
-          $count = count($_SESSION['cart']);
-          echo "<span id ='cart_item_count' class='text-warning bg-light'>$count</span>";
-        }
-        else{
-          echo "<span id ='cart_item_count' class='text-warning bg-light'>0</span>";
-        }
-        ?>
-</h5>
-</a>
-</div>
-</div>
-
+        <ul class="navbar-nav ms-auto me-5">
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="index.php">Home</a>
+              <a class="nav-link" aria-current="page" href="index.php"><i class="fa-solid fa-house mx-1"></i>Home</a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Categories
+              <a class="nav-link" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-table-list mx-1"></i>Categories
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 
@@ -73,6 +46,19 @@ include('../functions/common_functions.php');
                 get_categories();
                 ?>
               </ul>
+            </li>
+            <li class="nav-item">
+              <a href="cartPage.php" class="nav-item nav-link">
+                  <i class="fas fa-cart-shopping"></i> Cart
+                  <?php
+                  if (isset($_SESSION['cart'])) {
+                    $count = count($_SESSION['cart']);
+                    echo "<span id ='cart_item_count' class='text-warning bg-light'>$count</span>";
+                  } else {
+                    echo "<span id ='cart_item_count' class='text-warning bg-light'>0</span>";
+                  }
+                  ?>
+              </a>
             </li>
           </ul>
         </div>
