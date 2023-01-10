@@ -3,16 +3,17 @@
 include('../Database/DatabaseConnection.php');
 
 //getting products and displaying products in home page
-function get_products(){
-    global $adminconnection;
+function get_products()
+{
+  global $adminconnection;
 
-    // checking whether the category is set or not
-    if(!isset($_GET['category'])){
-      echo"<div class='mt-5 container'>
+  // checking whether the category is set or not
+  if (!isset($_GET['category'])) {
+    echo "<div class='mt-5 container'>
       <div class='row g-4'>";
     $select_products = "Select * from product order by rand() limit 0,12";
     $result_products = mysqli_query($adminconnection, $select_products);
-    while($row_data = mysqli_fetch_assoc($result_products)){
+    while ($row_data = mysqli_fetch_assoc($result_products)) {
       $Product_ID = $row_data['Product_ID'];
       $SKU = $row_data['SKU'];
       $Title = $row_data['Title'];
@@ -20,7 +21,7 @@ function get_products(){
       $Category_ID = $row_data['Category_ID'];
       $Subcategory_ID = $row_data['Subcategory_ID'];
       $Image = $row_data['Image'];
-      
+
       echo "<div class='col-lg-3 col-md-6'>
       <div class='card py-2 bg-dark text-light text-center'>
       <div class='card-title h3'>$Title</div>
@@ -38,39 +39,37 @@ function get_products(){
     </div>
     </div>
     </div>";
-
-    
+    }
+    echo "</div>
+  </div>";
   }
-  echo"</div>
-  </div>";    
-}
 }
 
 // getting unique category
-function get_unique_category(){
-    global $adminconnection;
+function get_unique_category()
+{
+  global $adminconnection;
 
-    // checking whether the category is set or not
-    if(isset($_GET['category'])){
-      echo"<div class='mt-5 container'>
+  // checking whether the category is set or not
+  if (isset($_GET['category'])) {
+    echo "<div class='mt-5 container'>
       <div class='row g-4'>";
-        $category_id = $_GET['category'];
-    $select_category_name = "Select Category_Name from category where Category_ID = $category_id"; 
-    $result_category_name = mysqli_query($adminconnection, $select_category_name); 
-    while($row_data = mysqli_fetch_assoc($result_category_name)){
+    $category_id = $_GET['category'];
+    $select_category_name = "Select Category_Name from category where Category_ID = $category_id";
+    $result_category_name = mysqli_query($adminconnection, $select_category_name);
+    while ($row_data = mysqli_fetch_assoc($result_category_name)) {
       $category_name = $row_data['Category_Name'];
-    }  
-    
+    }
+
     $select_products = "Select * from product where Category_ID = $category_id";
     $result_products = mysqli_query($adminconnection, $select_products);
     $row_count = mysqli_num_rows($result_products);
     echo "<div class='text-primary h5 fw-bold text-start py-1'>$category_name</div>";
-    if($row_count==0){
-        echo "<h2 class='text-danger'>Stocks are unavailable.</h2>";
-    }
-    else{
-      
-      while($row_data = mysqli_fetch_assoc($result_products)){
+    if ($row_count == 0) {
+      echo "<h2 class='text-danger'>Stocks are unavailable.</h2>";
+    } else {
+
+      while ($row_data = mysqli_fetch_assoc($result_products)) {
         $Product_ID = $row_data['Product_ID'];
         $SKU = $row_data['SKU'];
         $Title = $row_data['Title'];
@@ -78,7 +77,7 @@ function get_unique_category(){
         $Category_ID = $row_data['Category_ID'];
         $Subcategory_ID = $row_data['Subcategory_ID'];
         $Image = $row_data['Image'];
-        
+
         echo "<div class='col-lg-3 col-md-6'>
         <div class='card py-2 bg-dark text-light text-center'>
         <div class='card-title h3'>$Title</div>
@@ -96,21 +95,19 @@ function get_unique_category(){
       </div>
       </div>
       </div>";
-  
-      }  
-      
+      }
     }
-    echo"</div>
-    </div>";  
-     
-}
+    echo "</div>
+    </div>";
+  }
 }
 // getting categories from database and display categories in drop down menu in home page
-function get_categories(){
+function get_categories()
+{
   global $adminconnection;
   $select_categories = "Select * from category";
   $result_categories = mysqli_query($adminconnection, $select_categories);
-  while($row_data = mysqli_fetch_assoc($result_categories)){
+  while ($row_data = mysqli_fetch_assoc($result_categories)) {
     $category_name = $row_data['Category_Name'];
     $category_id = $row_data['Category_ID'];
     echo "<li><a href='ProductsPage.php?category=$category_id' class='dropdown-item'>$category_name</a></li>";
@@ -215,15 +212,16 @@ function get_categories(){
 }  
 } */
 
-function  view_product_details(){
+function  view_product_details()
+{
   global $adminconnection;
 
   // checking whether the category is set or not
-  if(isset($_GET['product_id'])){
+  if (isset($_GET['product_id'])) {
     $product_id = $_GET['product_id'];
     $select_products = "Select * from product where Product_ID=$product_id";
     $result_products = mysqli_query($adminconnection, $select_products);
-    while($row_data = mysqli_fetch_assoc($result_products)){
+    while ($row_data = mysqli_fetch_assoc($result_products)) {
       $Product_ID = $row_data['Product_ID'];
       $SKU = $row_data['SKU'];
       $Title = $row_data['Title'];
@@ -232,7 +230,7 @@ function  view_product_details(){
       $Subcategory_ID = $row_data['Subcategory_ID'];
       $Image = $row_data['Image'];
 
-    echo " <div class='container mt-5'>
+      echo " <div class='container mt-5'>
     <form action='CartPage.php' method='post'>
     <section class='py-5 mb-5 bg-light text-dark' id='info'>
       <div class='container'>
@@ -253,40 +251,35 @@ function  view_product_details(){
               voluptas nam!
             </p>
             <select id='VariantDetails' name='VariantDetails' class='form-select form-select-lg mb-3' aria-label='.form-select-lg example'>
-            <option selected>Select Variant</option>"
-            ;
-           
-          }
-          $iteration = 0;
-          $select_varients = "Select * from product_variant, variant where product_variant.Variant_ID = variant.Variant_ID AND Product_ID=$product_id";
-          $result_varients = mysqli_query($adminconnection, $select_varients);
-          $option_val = 0;
-          while($row_data = mysqli_fetch_assoc($result_varients)){
-            $Varient_ID = $row_data['Variant_ID'];
-            $Attribute = $row_data['Attribute'];
-            $Value = $row_data['Value'];
-            if($iteration==0){
-              
-              $varient_details ='';
-              $option_val++;
-              $varient_details=$varient_details.$Attribute . " : " . $Value.' , ';
-              $iteration+=1;
-            }
-            elseif($Attribute!='ZPrice'){
-              $varient_details=$varient_details.$Attribute. " : " .$Value.' , ' ;
-              $iteration+=1;
-            }
-            elseif($Attribute=='ZPrice'){
-              $varient_details=$varient_details."Price". " : " . $Value.' '.'LKR' ;
-              echo "
-              <option value=$Varient_ID>$varient_details</option>";
-              
-               
-            $iteration=0;
-            }
+            <option selected class='d-none'>Select Variant</option>";
+    }
+    $iteration = 0;
+    $select_varients = "Select * from product_variant, variant where product_variant.Variant_ID = variant.Variant_ID AND Product_ID=$product_id";
+    $result_varients = mysqli_query($adminconnection, $select_varients);
+    $option_val = 0;
+    while ($row_data = mysqli_fetch_assoc($result_varients)) {
+      $Varient_ID = $row_data['Variant_ID'];
+      $Attribute = $row_data['Attribute'];
+      $Value = $row_data['Value'];
+      if ($iteration == 0) {
 
-          }
-  echo " </select> 
+        $varient_details = '';
+        $option_val++;
+        $varient_details = $varient_details . $Attribute . " : " . $Value . ' , ';
+        $iteration += 1;
+      } elseif ($Attribute != 'ZPrice') {
+        $varient_details = $varient_details . $Attribute . " : " . $Value . ' , ';
+        $iteration += 1;
+      } elseif ($Attribute == 'ZPrice') {
+        $varient_details = $varient_details . "Price" . " : " . $Value . ' ' . 'LKR';
+        echo "
+              <option value=$Varient_ID>$varient_details</option>";
+
+
+        $iteration = 0;
+      }
+    }
+    echo " </select> 
   <div class='ms-auto me-4'>
   <button type='submit' class='btn btn-primary my-3' name='add'>Add to Cart <i class='fas fa-shopping-cart'></i></button>
     <!-- <a href='CartPage.php' class='btn btn-primary' name='add' >Add to Cart</a> -->
@@ -298,40 +291,35 @@ function  view_product_details(){
 </section>
 </form>
 </div> ";
-
-  
-
-  
-}  
+  }
 }
 
 
 
-function load_cart_items($varientID,$variant_count,$cart_total){
+function load_cart_items($varientID, $variant_count, $cart_total)
+{
   global $adminconnection;
   $iteration = 0;
   $select_varients = "Select * from product, product_variant, variant where product.Product_ID = product_variant.Product_ID AND product_variant.Variant_ID = variant.Variant_ID AND product_variant.Variant_ID=$varientID";
   $result_varients = mysqli_query($adminconnection, $select_varients);
   $option_val = 0;
-  while($row_data = mysqli_fetch_assoc($result_varients)){
+  while ($row_data = mysqli_fetch_assoc($result_varients)) {
     $Title = $row_data['Title'];
     $Varient_ID = $row_data['Variant_ID'];
     $Attribute = $row_data['Attribute'];
     $Value = $row_data['Value'];
-    if($iteration==0){
-      
-      $varient_details ='';
+    if ($iteration == 0) {
+
+      $varient_details = '';
       $option_val++;
-      $varient_details=$varient_details.$Title." ".$Attribute . " : " . $Value;
-      $iteration+=1;
-    }
-    elseif($Attribute!='ZPrice'){
-      $varient_details=$varient_details.' , '.$Attribute. " : " .$Value ;
-      $iteration+=1;
-    }
-    elseif($Attribute=='ZPrice'){
-      $total = $Value*2;
-      $cart_total+=$total;
+      $varient_details = $varient_details . $Title . " " . $Attribute . " : " . $Value;
+      $iteration += 1;
+    } elseif ($Attribute != 'ZPrice') {
+      $varient_details = $varient_details . ' , ' . $Attribute . " : " . $Value;
+      $iteration += 1;
+    } elseif ($Attribute == 'ZPrice') {
+      $total = $Value * 2;
+      $cart_total += $total;
       echo "
       <tr>
       <td><button class='btn btn-danger'>Remove</button></td>
@@ -341,11 +329,10 @@ function load_cart_items($varientID,$variant_count,$cart_total){
       <td>2</td>
       <td>$total</td>
     </tr>";
-      
-       
-    $iteration=0;
-    return $cart_total;
-    }
 
+
+      $iteration = 0;
+      return $cart_total;
+    }
   }
 }
