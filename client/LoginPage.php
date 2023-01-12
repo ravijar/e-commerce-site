@@ -20,12 +20,14 @@ if(isset($_POST['user_login'])){
     $error_password = 'Please enter your Password!';
   }
 
-  $select_query = "Select * from user where User_Name = '$user_username'";
-  $result = mysqli_query($adminconnection, $select_query);
-  $row_count = mysqli_num_rows($result);
-  $row_data = mysqli_fetch_assoc($result);
+  $sql =$adminconnection->prepare("Select *,count(*) from user where User_name = ?") ;
+  $sql->bind_param("s",$user_username);
+  $sql->execute();
+  $result = $sql->get_result();
+  $row_data  = $result->fetch_assoc();
+  
   if(!empty($user_username) && !empty($user_password)){
-    if($row_count>0){
+    if($row_data['count(*)']>0){
       if(password_verify($user_password, $row_data['Password'])){
         $error_credentials = '';
         echo "<script>alert('Login successful.')</script>";
@@ -74,11 +76,16 @@ if(isset($_POST['guest_login'])){
      ('$guest_contact', '$guest_address', '$guest_city')";
     
     $sql_execute = mysqli_query($adminconnection, $insert_query);
+
+    $sql =$adminconnection->prepare("insert into guest (Telephone_No, Street_Address, City) values
+    (?,?,?) ");
+    $sql->bind_param("sss",$guest_contact, $guest_address, $guest_city);
+    $sql_execute = $sql->execute();
+
     if(!$sql_execute){
       die(mysqli_error($adminconnection));	
     }else{
       $_SESSION["login_user_city"] = $guest_city;
-      $_SESSION["guest_id"] = $row_data['Guest_ID'];
       header('Location: checkoutPage.php');
     }
   }
