@@ -343,3 +343,48 @@ function load_cart_items($varientID, $variant_count, $cart_total)
     }
   }
 }
+
+
+function load_checkout_items($varientID, $variant_count, $cart_total)
+{
+  global $adminconnection;
+  $iteration = 0;
+  $select_varients = "Select * from product, product_variant, variant where product.Product_ID = product_variant.Product_ID AND product_variant.Variant_ID = variant.Variant_ID AND product_variant.Variant_ID=$varientID";
+  $result_varients = mysqli_query($adminconnection, $select_varients);
+  $option_val = 0;
+  while ($row_data = mysqli_fetch_assoc($result_varients)) {
+    
+    $Title = $row_data['Title'];
+    $Varient_ID = $row_data['Variant_ID'];
+    $Attribute = $row_data['Attribute'];
+    $Value = $row_data['Value'];
+    if ($iteration == 0) {
+
+      $varient_details = '';
+      $option_val++;
+      $varient_details = $varient_details . $Title . " " . $Attribute . " : " . $Value;
+      $iteration += 1;
+    } elseif ($Attribute != 'ZPrice') {
+      $varient_details = $varient_details . ' , ' . $Attribute . " : " . $Value;
+      $iteration += 1;
+    } elseif ($Attribute == 'ZPrice') {
+      $total = $Value * 2;
+      $cart_total += $total;
+
+      echo "
+      <tr>
+      
+      
+      <th scope='row'>$variant_count</th>
+      <td>$varient_details</td>
+      <td>$Value</td>
+      <td>2</td>
+      <td>$total</td>
+    </tr>";
+    
+
+      $iteration = 0;
+      return $cart_total;
+    }
+  }
+}

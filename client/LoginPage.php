@@ -29,6 +29,7 @@ if(isset($_POST['user_login'])){
       if(password_verify($user_password, $row_data['Password'])){
         $error_credentials = '';
         echo "<script>alert('Login successful.')</script>";
+        $_SESSION["login_user_city"] = $row_data['City'];
         header('Location: checkoutPage.php');
       }else{
         $error_credentials = 'Invalid Credentials!'; 
@@ -74,6 +75,7 @@ if(isset($_POST['guest_login'])){
     if(!$sql_execute){
       die(mysqli_error($adminconnection));	
     }else{
+      $_SESSION["login_user_city"] = $guest_city;
       header('Location: checkoutPage.php');
     }
   }

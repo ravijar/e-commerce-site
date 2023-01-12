@@ -17,40 +17,56 @@ include('../client/inc/header.php');
             </caption>
             <thead>
               <tr>
-                <th scope="col">#</th>
+                <th scope="col">Product Number</th>
                 <th scope="col">Item</th>
+                <th scope="col">Unit Price</th>
                 <th scope="col">Units</th>
-                <th scope="col">Price</th>
+                <th scope="col">Sub total</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>I Phone</td>
-                <td>1</td>
-                <td>200</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Samsung Phone</td>
-                <td>1</td>
-                <td>300</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>TV</td>
-                <td>1</td>
-                <td>400</td>
-              </tr>
+            <?php
+        if(!empty($_SESSION['cart'])){
+          $varient_id = array_column($_SESSION['cart'],'VariantDetails');
+          $variant_count;
+         $variant_count=0;
+        if(!empty($varient_id)){
+          $cart_total = 0;
+          foreach($varient_id as $id){
+            $variant_count++;
+            $cart_total = load_checkout_items($id,$variant_count,$cart_total);
+          }
+          
+        }
+        }
+        
+        
+        
+        ?>
             </tbody>
           </table>
           <div class="row text-secondary lead justify-content-end">
             <div class="col-2 text-end ">Total:</div>
-            <div class="col-3">Answer</div>
+
+            <?php
+      if(!empty($_SESSION['cart'])){
+        echo "<div class='col-3'>$cart_total</div> ";
+      }
+      else{
+        echo "<div class='col-3'>0</div>  ";
+      }
+       ?>
           </div>
           <div class="row text-secondary lead justify-content-end">
-            <div class="col-4 text-end">Estimated Delivery:</div>
-            <div class="col-3">Answer</div>
+            <div class="col-6 text-end">Estimated Delivery Time:</div>
+            <?php
+              $select_delivery_city= "Select * from delivery where City='".$_SESSION['login_user_city']."'";;
+              $result_delivery_city = mysqli_query($adminconnection, $select_delivery_city);
+              while ($row_data = mysqli_fetch_assoc($result_delivery_city)) {
+                $days = $row_data['Days'];
+              }
+            ?>
+            <div class="col-3"><?php echo $days; ?> Days</div>
           </div>
           <div class="row mt-4 mb-2">
             <div class="col align-self-center">Select Payment Method:</div>
