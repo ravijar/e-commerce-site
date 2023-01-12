@@ -68,21 +68,23 @@ if(isset($_POST['user_register'])){
     $hash_password = password_hash($user_password, PASSWORD_DEFAULT);
         
     //select query
-
-    $select_query = "Select * from user where User_name='$user_username'";
-    $result = mysqli_query($adminconnection, $select_query);
-    $row_count = mysqli_num_rows($result);
     
+    $sql =$adminconnection->prepare("Select count(*) from user where User_name = ?") ;
+    $sql->bind_param("s",$user_username);
+    $sql->execute();
+    $result = $sql->get_result();
+    $row_count = $result->fetch_assoc()['count(*)'];
+
     if($row_count==0 && ($user_password === $user_confirm_password)){
       if($required_fields_set){
         //insert query
-        $insert_query = "insert into user (User_Name, Password, First_Name, Last_Name, Telephone_No, Street_Address,
-        City) values ('$user_username', '$hash_password', '$user_firstname', '$user_lastname', '$user_contact',
-        '$user_address', '$user_city')";
-        
-        $sql_execute = mysqli_query($adminconnection, $insert_query);
+
+        $sql =$adminconnection->prepare("insert into user (User_Name, Password, First_Name, Last_Name, Telephone_No, Street_Address,City) values (?,?,?,?,?,?,?)") ;
+        $sql->bind_param("sssssss",$user_username, $hash_password, $user_firstname, $user_lastname, $user_contact,$user_address, $user_city);
+        $sql_execute = $sql->execute();
+
         if($sql_execute){
-          echo "<script>alert('Data inserted successfully.')</script>";
+          echo "<script>alert('Account created successfully.')</script>";
           echo"<script>location.href='LoginPage.php'</script>";
 
         }else{
