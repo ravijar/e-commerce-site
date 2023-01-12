@@ -304,6 +304,7 @@ function load_cart_items($varientID, $variant_count, $cart_total)
   $result_varients = mysqli_query($adminconnection, $select_varients);
   $option_val = 0;
   while ($row_data = mysqli_fetch_assoc($result_varients)) {
+    
     $Title = $row_data['Title'];
     $Varient_ID = $row_data['Variant_ID'];
     $Attribute = $row_data['Attribute'];
@@ -322,14 +323,20 @@ function load_cart_items($varientID, $variant_count, $cart_total)
       $cart_total += $total;
       echo "
       <tr>
-      <td><button class='btn btn-danger'>Remove</button></td>
+      
+      <td>
+      <form action='editCart.php' method = 'post'>
+      <input type='hidden' name='varient' value='$variant_count'/>
+      <input type='submit' name='event' value='Remove' class='btn btn-danger'>
+      </form>
+      </td>
       <th scope='row'>$variant_count</th>
       <td>$varient_details</td>
       <td>$Value</td>
       <td>2</td>
       <td>$total</td>
     </tr>";
-
+    
 
       $iteration = 0;
       return $cart_total;
