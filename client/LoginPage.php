@@ -30,6 +30,8 @@ if(isset($_POST['user_login'])){
         $error_credentials = '';
         echo "<script>alert('Login successful.')</script>";
         $_SESSION["login_user_city"] = $row_data['City'];
+        $_SESSION["user_id"] = $row_data['User_ID'];
+
         header('Location: checkoutPage.php');
       }else{
         $error_credentials = 'Invalid Credentials!'; 
@@ -76,6 +78,7 @@ if(isset($_POST['guest_login'])){
       die(mysqli_error($adminconnection));	
     }else{
       $_SESSION["login_user_city"] = $guest_city;
+      $_SESSION["guest_id"] = $row_data['Guest_ID'];
       header('Location: checkoutPage.php');
     }
   }

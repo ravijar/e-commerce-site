@@ -39,6 +39,7 @@ include('../client/inc/header.php');
           
         }
         }
+        $_SESSION["cart_total"] = $cart_total;
         
         
         
@@ -50,7 +51,7 @@ include('../client/inc/header.php');
 
             <?php
       if(!empty($_SESSION['cart'])){
-        echo "<div class='col-3'>$cart_total</div> ";
+        echo "<div class='col-3'>$cart_total LKR</div> ";
       }
       else{
         echo "<div class='col-3'>0</div>  ";
@@ -108,3 +109,36 @@ include('../client/inc/header.php');
 <?php 
   include('../client/inc/footer.php');
 ?>
+
+<!-- <?php
+if(!isset($_SESSION["user_id"])){
+  $_SESSION["user_id"] = null;
+}
+
+if(!isset($_SESSION["guest_id"])){
+  $_SESSION["guest_id"] = null;
+}
+?>
+<?php
+$adminconnection;
+
+// Turn autocommit off
+$mysqli -> autocommit(FALSE);
+
+// Insert some values
+$mysqli -> query("INSERT INTO cart (User_ID,Guest_ID,Total_Value)
+VALUES ('{$_SESSION['user_id']}','{$_SESSION['guest_id']}','{$_SESSION['cart_total']}')");
+$mysqli -> query("INSERT INTO cart_item (Cart_ID,VariantID, Quantity, Item_Total_Price)
+VALUES ('Glenn','Quagmire',33,)");
+$mysqli -> query("UPDATE inventory SET Quantity = 1 WHERE Variant_ID = 2");
+$date = date("Y-m-d");
+$mysqli -> query("INSERT INTO order (Cart_ID, Date_Of_Order, User_ID, Guest_ID, Payment_type, Delivery_type)
+VALUES ('Glenn',$date,'{$_SESSION['user_id']}','{$_SESSION['guest_id']}'),,");
+// Commit transaction
+if (!$mysqli -> commit()) {
+  echo "Commit transaction failed";
+  exit();
+}
+
+$mysqli -> close();
+?> -->
