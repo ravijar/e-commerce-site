@@ -86,7 +86,7 @@ function get_unique_category()
         class='card-img-top img-fluid'
       />
       <div class='card-body'>
-        <div class='card-title h4 mb-3'>500 LKR</div>
+        
         <a
           href='../client/ProductPage.php?product_id=$Product_ID'
           class='btn btn-secondary'
