@@ -20,12 +20,14 @@ if(isset($_POST['user_login'])){
     $error_password = 'Please enter your Password!';
   }
 
-  $select_query = "Select * from user where User_Name = '$user_username'";
-  $result = mysqli_query($adminconnection, $select_query);
-  $row_count = mysqli_num_rows($result);
-  $row_data = mysqli_fetch_assoc($result);
+  $sql =$adminconnection->prepare("Select *,count(*) from user where User_name = ?") ;
+  $sql->bind_param("s",$user_username);
+  $sql->execute();
+  $result = $sql->get_result();
+  $row_data  = $result->fetch_assoc();
+  
   if(!empty($user_username) && !empty($user_password)){
-    if($row_count>0){
+    if($row_data['count(*)']>0){
       if(password_verify($user_password, $row_data['Password'])){
         $error_credentials = '';
         echo "<script>alert('Login successful.')</script>";
