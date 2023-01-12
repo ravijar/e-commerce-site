@@ -76,11 +76,16 @@ if(isset($_POST['guest_login'])){
      ('$guest_contact', '$guest_address', '$guest_city')";
     
     $sql_execute = mysqli_query($adminconnection, $insert_query);
+
+    $sql =$adminconnection->prepare("insert into guest (Telephone_No, Street_Address, City) values
+    (?,?,?) ");
+    $sql->bind_param("sss",$guest_contact, $guest_address, $guest_city);
+    $sql_execute = $sql->execute();
+
     if(!$sql_execute){
       die(mysqli_error($adminconnection));	
     }else{
       $_SESSION["login_user_city"] = $guest_city;
-      $_SESSION["guest_id"] = $row_data['Guest_ID'];
       header('Location: checkoutPage.php');
     }
   }
