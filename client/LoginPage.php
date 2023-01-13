@@ -72,10 +72,6 @@ if(isset($_POST['guest_login'])){
 
   //insert query
   if($required_fields_set){
-    $insert_query = "insert into guest (Telephone_No, Street_Address, City) values
-     ('$guest_contact', '$guest_address', '$guest_city')";
-    
-    $sql_execute = mysqli_query($adminconnection, $insert_query);
 
     $sql =$adminconnection->prepare("insert into guest (Telephone_No, Street_Address, City) values
     (?,?,?) ");
