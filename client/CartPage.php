@@ -12,15 +12,14 @@ if(isset($_POST['add'])){
     else{
       $count = count($_SESSION['cart']);
       $item_array = array(
-        'VariantDetails' => $_POST['VariantDetails']
+        'VariantDetails' => [$_POST['VariantDetails'],$_POST['UnitSelection']]
       );
       $_SESSION['cart'][$count] = $item_array;
-      // print_r($_SESSION['cart']);
     }
   }
   else{
     $item_array = array(
-        'VariantDetails' => $_POST['VariantDetails']
+        'VariantDetails' => [$_POST['VariantDetails'],$_POST['UnitSelection']]
     );
 
     $_SESSION['cart'][0] = $item_array;
@@ -55,6 +54,7 @@ if(isset($_POST['add'])){
         if(!empty($varient_id)){
           $cart_total = 0;
           foreach($varient_id as $id){
+            
             $variant_count++;
             $cart_total = load_cart_items($id,$variant_count,$cart_total);
           }

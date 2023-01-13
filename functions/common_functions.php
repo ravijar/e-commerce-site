@@ -21,7 +21,6 @@ function get_products()
       $Category_ID = $row_data['Category_ID'];
       $Subcategory_ID = $row_data['Subcategory_ID'];
       $Image = $row_data['Image'];
-      
 
       echo "<div class='col-lg-3 col-md-6'>
       <div class='card py-2 bg-dark text-light text-center'>
@@ -230,7 +229,6 @@ function  view_product_details()
       $Category_ID = $row_data['Category_ID'];
       $Subcategory_ID = $row_data['Subcategory_ID'];
       $Image = $row_data['Image'];
-      $description  = $row_data['Description'];
 
       echo " <div class='container mt-5'>
     <form action='CartPage.php' method='post'>
@@ -248,7 +246,9 @@ function  view_product_details()
             <h2 class='mb-4'>$Title</h2>
             <div class='lead'>Product Description:</div>
             <p class='mb-4'>
-            $description
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque
+              maxime labore deserunt quasi at autem natus veritatis quia
+              voluptas nam!
             </p>
             <select id='VariantDetails' name='VariantDetails' class='form-select form-select-lg mb-3' aria-label='.form-select-lg example'>
             <option selected class='d-none'>Select Variant</option>";
@@ -280,12 +280,12 @@ function  view_product_details()
       }
     }
     echo " </select> 
-    <!--<select id='UnitSelection' name='UnitSelection' class='form-select form-select-lg mb-3' aria-label='.form-select-lg example'>
+   <select id='UnitSelection' name='UnitSelection' class='form-select form-select-lg mb-3' aria-label='.form-select-lg example'>
     <option selected class='d-none'>Select Units</option>
     <option>1</option>
     <option>2</option>
     <option>3</option>
-  </select> -->
+  </select> 
   <div class='ms-auto me-4'>
   <button type='submit' class='btn btn-primary my-3' name='add'>Add to Cart <i class='fas fa-shopping-cart'></i></button>
     <!-- <a href='CartPage.php' class='btn btn-primary' name='add' >Add to Cart</a> -->
@@ -306,7 +306,7 @@ function load_cart_items($varientID, $variant_count, $cart_total)
 {
   global $adminconnection;
   $iteration = 0;
-  $select_varients = "Select * from product, product_variant, variant where product.Product_ID = product_variant.Product_ID AND product_variant.Variant_ID = variant.Variant_ID AND product_variant.Variant_ID=$varientID";
+  $select_varients = "Select * from product, product_variant, variant where product.Product_ID = product_variant.Product_ID AND product_variant.Variant_ID = variant.Variant_ID AND product_variant.Variant_ID=$varientID[0]";
   $result_varients = mysqli_query($adminconnection, $select_varients);
   $option_val = 0;
   while ($row_data = mysqli_fetch_assoc($result_varients)) {
@@ -325,7 +325,7 @@ function load_cart_items($varientID, $variant_count, $cart_total)
       $varient_details = $varient_details . ' , ' . $Attribute . " : " . $Value;
       $iteration += 1;
     } elseif ($Attribute == 'ZPrice') {
-      $total = $Value * 2;
+      $total = $Value * $varientID[1];
       $cart_total += $total;
       echo "
       <tr>
@@ -339,7 +339,7 @@ function load_cart_items($varientID, $variant_count, $cart_total)
       <th scope='row'>$variant_count</th>
       <td>$varient_details</td>
       <td>$Value</td>
-      <td>2</td>
+      <td>$varientID[1]</td>
       <td>$total</td>
     </tr>";
     
@@ -355,7 +355,7 @@ function load_checkout_items($varientID, $variant_count, $cart_total)
 {
   global $adminconnection;
   $iteration = 0;
-  $select_varients = "Select * from product, product_variant, variant where product.Product_ID = product_variant.Product_ID AND product_variant.Variant_ID = variant.Variant_ID AND product_variant.Variant_ID=$varientID";
+  $select_varients = "Select * from product, product_variant, variant where product.Product_ID = product_variant.Product_ID AND product_variant.Variant_ID = variant.Variant_ID AND product_variant.Variant_ID=$varientID[0]";
   $result_varients = mysqli_query($adminconnection, $select_varients);
   $option_val = 0;
   while ($row_data = mysqli_fetch_assoc($result_varients)) {
@@ -374,7 +374,7 @@ function load_checkout_items($varientID, $variant_count, $cart_total)
       $varient_details = $varient_details . ' , ' . $Attribute . " : " . $Value;
       $iteration += 1;
     } elseif ($Attribute == 'ZPrice') {
-      $total = $Value * 2;
+      $total = $Value * $varientID[1];
       $cart_total += $total;
 
       echo "
@@ -384,7 +384,7 @@ function load_checkout_items($varientID, $variant_count, $cart_total)
       <th scope='row'>$variant_count</th>
       <td>$varient_details</td>
       <td>$Value</td>
-      <td>2</td>
+      <td>$varientID[1]</td>
       <td>$total</td>
 
     
