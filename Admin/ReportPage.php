@@ -167,7 +167,6 @@
               <div class="d-flex flex-row">
               <form class="form-inline" method="POST">
                 <div class="d-flex gap-3">
-                  <div>
                   <div class="form-group">
                   <select
                     class="form-select mb-3"
