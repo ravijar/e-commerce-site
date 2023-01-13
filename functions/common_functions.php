@@ -386,11 +386,22 @@ function load_checkout_items($varientID, $variant_count, $cart_total)
       <td>$Value</td>
       <td>2</td>
       <td>$total</td>
-    </tr>";
+
     
 
-      $iteration = 0;
-      return $cart_total;
+    
+    </tr>";
+
+    $iteration = 0;
+    $items = 
+      array($Varient_ID,2,$total)
+    ;
+    $_SESSION['cart_items'][$variant_count-1] = $items;
+    return $cart_total;
     }
+    
+    
+    
+    
   }
 }

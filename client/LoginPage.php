@@ -33,8 +33,8 @@ if(isset($_POST['user_login'])){
         echo "<script>alert('Login successful.')</script>";
         $_SESSION["login_user_city"] = $row_data['City'];
         $_SESSION["user_id"] = $row_data['User_ID'];
-
         header('Location: checkoutPage.php');
+        
       }else{
         $error_credentials = 'Invalid Credentials!'; 
       }
@@ -70,6 +70,7 @@ if(isset($_POST['guest_login'])){
     $required_fields_set = false;
   }
 
+  
   //insert query
   if($required_fields_set){
 
@@ -78,10 +79,12 @@ if(isset($_POST['guest_login'])){
     $sql->bind_param("sss",$guest_contact, $guest_address, $guest_city);
     $sql_execute = $sql->execute();
 
+
     if(!$sql_execute){
       die(mysqli_error($adminconnection));	
     }else{
       $_SESSION["login_user_city"] = $guest_city;
+
       header('Location: checkoutPage.php');
     }
   }

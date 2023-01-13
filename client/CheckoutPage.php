@@ -1,7 +1,14 @@
 <?php 
 session_start();
 include('../client/inc/header.php');
-
+if(isset($_SESSION["login_user_city"])){
+  $select_delivery_city= "Select * from delivery where City='{$_SESSION["login_user_city"]}'";
+  $result_delivery_city = mysqli_query($adminconnection, $select_delivery_city);
+  $rowcount=mysqli_num_rows($result_delivery_city);
+  if($rowcount==0){
+header('Location: LoginPage.php');
+  }
+}
 ?>
 
 <div>
@@ -61,11 +68,14 @@ include('../client/inc/header.php');
           <div class="row text-secondary lead justify-content-end">
             <div class="col-6 text-end">Estimated Delivery Time:</div>
             <?php
-              $select_delivery_city= "Select * from delivery where City='".$_SESSION['login_user_city']."'";;
+              $select_delivery_city= "Select * from delivery where City='".$_SESSION['login_user_city']."'";
               $result_delivery_city = mysqli_query($adminconnection, $select_delivery_city);
+              
               while ($row_data = mysqli_fetch_assoc($result_delivery_city)) {
                 $days = $row_data['Days'];
               }
+            
+          
             ?>
             <div class="col-3"><?php echo $days; ?> Days</div>
           </div>
@@ -91,9 +101,9 @@ include('../client/inc/header.php');
           </div>
 
           <div class="ms-auto py-3">
-            <button type="submit" class="btn btn-primary ms-auto">
-              Place Order
-            </button>
+            <form action = "" method = 'post'>
+          <input type='submit' name='PlaceOrder' value='Place Order' class='btn btn-primary'>
+            </form>
           </div>
         </div>
       </div>
@@ -105,12 +115,8 @@ include('../client/inc/header.php');
   </div>
 </body>
 </html>
-
-<?php 
-  include('../client/inc/footer.php');
-?>
-
-<!-- <?php
+<?php
+if(isset($_POST['PlaceOrder'])){
 if(!isset($_SESSION["user_id"])){
   $_SESSION["user_id"] = null;
 }
@@ -118,27 +124,76 @@ if(!isset($_SESSION["user_id"])){
 if(!isset($_SESSION["guest_id"])){
   $_SESSION["guest_id"] = null;
 }
-?>
-<?php
-$adminconnection;
+ global $adminconnection;
+  $select_cart_items = "Select * from cart";
+  $result_varients = mysqli_query($adminconnection, $select_cart_items);
+  while ($row_data = mysqli_fetch_assoc($result_varients)) {
+    $cart_id = $row_data['Cart_ID'];
+  }
+  $cart_last_id = $cart_id;
+
 
 // Turn autocommit off
-$mysqli -> autocommit(FALSE);
 
-// Insert some values
-$mysqli -> query("INSERT INTO cart (User_ID,Guest_ID,Total_Value)
-VALUES ('{$_SESSION['user_id']}','{$_SESSION['guest_id']}','{$_SESSION['cart_total']}')");
-$mysqli -> query("INSERT INTO cart_item (Cart_ID,VariantID, Quantity, Item_Total_Price)
-VALUES ('Glenn','Quagmire',33,)");
-$mysqli -> query("UPDATE inventory SET Quantity = 1 WHERE Variant_ID = 2");
-$date = date("Y-m-d");
-$mysqli -> query("INSERT INTO order (Cart_ID, Date_Of_Order, User_ID, Guest_ID, Payment_type, Delivery_type)
-VALUES ('Glenn',$date,'{$_SESSION['user_id']}','{$_SESSION['guest_id']}'),,");
-// Commit transaction
-if (!$mysqli -> commit()) {
-  echo "Commit transaction failed";
-  exit();
+$nullguest= $_SESSION['guest_id'];
+$nulluser = $_SESSION['user_id'];
+try {
+  global $adminconnection;
+  // First of all, let's begin a transaction
+  mysqli_begin_transaction($adminconnection);
+  // A set of queries; if one fails, an exception should be thrown
+  if($nullguest = NULL){
+    $adminconnection -> query("INSERT INTO cart (User_ID,Total_Value)
+VALUES ('{$_SESSION['user_id']}','{$_SESSION['cart_total']}')");
+
+  }
+  else{
+    $adminconnection -> query("INSERT INTO cart (Guest_ID,Total_Value)
+VALUES ('{$_SESSION['user_id']}','{$_SESSION['cart_total']}')");
+
+  }
+  $arrayLength = count($_SESSION['cart_items']);
+  $array = $_SESSION['cart_items'];
+for ($i = 0; $i <=$arrayLength-1; $i++) {
+  $VariantID = $array[$i][0];
+  $Quantity = $array[$i][1];
+  $Item_Total_Price = $array[$i][2];
+  $adminconnection -> query("INSERT INTO cart_item (Cart_ID,Variant_ID, Quantity, Item_Total_Price)
+VALUES ($cart_last_id+$i,$VariantID,$Quantity,$Item_Total_Price)");
+$result = $adminconnection -> query("SELECT Quantity FROM inventory WHERE Variant_ID = '{$_SESSION['cart_items'][$i][1]}'");
+
+$adminconnection -> query("UPDATE inventory SET Quantity = $result->num_rows-'{$_SESSION['cart_items'][$i][1]}'  WHERE Variant_ID = '{$_SESSION['cart_items'][$i][0]}'");
 }
 
-$mysqli -> close();
-?> -->
+
+$date = date("Y-m-d");
+if($nullguest = null){
+  $adminconnection -> query("INSERT INTO `order` (Cart_ID, Date_Of_Order, User_ID, Payment_type, Delivery_type)
+VALUES ( 4,$date,'{$_SESSION['user_id']}','Cash','Delivery')");
+
+}
+else if($nulluser = null){
+  $adminconnection -> query("INSERT INTO `order` (Cart_ID, Date_Of_Order, Guest_ID, Payment_type, Delivery_type)
+VALUES (4,$date,'{$_SESSION['guest_id']}','Cash','Delivery')");
+}
+  // If we arrive here, it means that no exception was thrown
+  // i.e. no query has failed, and we can commit the transaction
+  mysqli_commit($adminconnection);
+  echo "<script>alert('Order Successful.')</script>";
+  // header('Location: index.php');
+
+  } catch (Exception $e) {
+    echo $e;
+  // An exception has been thrown
+  // We must rollback the transaction
+  mysqli_rollback($adminconnection);
+  }
+
+// Insert some values
+}
+?> 
+<?php 
+  include('../client/inc/footer.php');
+?>
+
+
