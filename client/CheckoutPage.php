@@ -79,29 +79,34 @@ header('Location: LoginPage.php');
             ?>
             <div class="col-3"><?php echo $days; ?> Days</div>
           </div>
+          <form action = "" method = 'post'>
           <div class="row mt-4 mb-2">
             <div class="col align-self-center">Select Payment Method:</div>
             <div class="col">
-              <select class="form-select" aria-label="Default select example">
-                <option selected class="d-none">Payment Method</option>
-                <option value="1">Cash</option>
-                <option value="2">Card</option>
+            <select name="Payment_Method" class="form-select">
+        <option value="" disabled selected>Payment Method</option>
+              <!-- <select class="form-select" aria-label="Default select example" name="Payment_Method" >
+                <option selected class="d-none">Payment Method</option> -->
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
               </select>
             </div>
           </div>
           <div class="row">
             <div class="col align-self-center">Select Delivery Method:</div>
             <div class="col">
-              <select class="form-select" aria-label="Default select example">
-                <option selected class="d-none">Delivery Method</option>
-                <option value="1">Store Pickup</option>
-                <option value="2">Delivery</option>
+            <select name="Delivery_Method" class="form-select">
+        <option value="" disabled selected>Delivery Method</option>
+              <!-- <select class="form-select" aria-label="Default select example" name="Delivery_Method" >
+                <option selected class="d-none">Delivery Method</option> -->
+                <option value="Store_Pickup">Store_Pickup</option>
+                <option value="Delivery">Delivery</option>
               </select>
             </div>
           </div>
 
           <div class="ms-auto py-3">
-            <form action = "" method = 'post'>
+            
           <input type='submit' name='PlaceOrder' value='Place Order' class='btn btn-primary'>
             </form>
           </div>
@@ -117,12 +122,16 @@ header('Location: LoginPage.php');
 </html>
 <?php
 if(isset($_POST['PlaceOrder'])){
-if(!isset($_SESSION["user_id"])){
-  $_SESSION["user_id"] = null;
+  if(!empty($_POST['Payment_Method']) and !empty($_POST['Payment_Method'])){
+  $Payment_Method = $_POST['Payment_Method'];
+  $Delivery_Method = $_POST['Delivery_Method'];
+}
+if(!isset($_SESSION['user_id'])){
+  $_SESSION['user_id'] = null;
 }
 
-if(!isset($_SESSION["guest_id"])){
-  $_SESSION["guest_id"] = null;
+if(!isset($_SESSION['guest_id'])){
+  $_SESSION['guest_id'] = null;
 }
  global $adminconnection;
   $select_cart_items = "Select * from cart";
@@ -130,7 +139,8 @@ if(!isset($_SESSION["guest_id"])){
   while ($row_data = mysqli_fetch_assoc($result_varients)) {
     $cart_id = $row_data['Cart_ID'];
   }
-  $cart_last_id = $cart_id;
+  $cart_last_id = $cart_id+1;
+  
 
 
 // Turn autocommit off
@@ -142,46 +152,63 @@ try {
   // First of all, let's begin a transaction
   mysqli_begin_transaction($adminconnection);
   // A set of queries; if one fails, an exception should be thrown
-  if($nullguest = NULL){
+  if($nullguest == NULL){
     $adminconnection -> query("INSERT INTO cart (User_ID,Total_Value)
 VALUES ('{$_SESSION['user_id']}','{$_SESSION['cart_total']}')");
-
   }
-  else{
+  else if($nulluser == null){
     $adminconnection -> query("INSERT INTO cart (Guest_ID,Total_Value)
-VALUES ('{$_SESSION['user_id']}','{$_SESSION['cart_total']}')");
-
+VALUES ('{$_SESSION['guest_id']}','{$_SESSION['cart_total']}')");
   }
+  
   $arrayLength = count($_SESSION['cart_items']);
   $array = $_SESSION['cart_items'];
+  
 for ($i = 0; $i <=$arrayLength-1; $i++) {
   $VariantID = $array[$i][0];
+ 
   $Quantity = $array[$i][1];
   $Item_Total_Price = $array[$i][2];
+/*   echo " ";
+  echo $cart_last_id+$i;
+  echo " ";
+  echo $VariantID;
+  echo " ";
+  echo $Quantity;
+  echo " ";
+  echo $Item_Total_Price; */
+  
+  $adminconnection->query('SET foreign_key_checks = 0');
   $adminconnection -> query("INSERT INTO cart_item (Cart_ID,Variant_ID, Quantity, Item_Total_Price)
 VALUES ($cart_last_id+$i,$VariantID,$Quantity,$Item_Total_Price)");
+$adminconnection->query('SET foreign_key_checks = 1');
 $result = $adminconnection -> query("SELECT Quantity FROM inventory WHERE Variant_ID = '{$_SESSION['cart_items'][$i][1]}'");
 
-$adminconnection -> query("UPDATE inventory SET Quantity = $result->num_rows-'{$_SESSION['cart_items'][$i][1]}'  WHERE Variant_ID = '{$_SESSION['cart_items'][$i][0]}'");
+
+while($row = $result->fetch_assoc()) {
+  $remainder = $row['Quantity']-$_SESSION['cart_items'][$i][1];
+}
+$adminconnection -> query("UPDATE inventory SET Quantity = $remainder  WHERE Variant_ID = '{$_SESSION['cart_items'][$i][0]}'");
 }
 
 
 $date = date("Y-m-d");
-if($nullguest = null){
+$adminconnection->query('SET foreign_key_checks = 0');
+if($nullguest == null){
   $adminconnection -> query("INSERT INTO `order` (Cart_ID, Date_Of_Order, User_ID, Payment_type, Delivery_type)
-VALUES ( 4,$date,'{$_SESSION['user_id']}','Cash','Delivery')");
+VALUES ($cart_last_id,'$date','{$_SESSION['user_id']}','$Payment_Method','$Delivery_Method')");
 
 }
-else if($nulluser = null){
+else if($nulluser == null){
   $adminconnection -> query("INSERT INTO `order` (Cart_ID, Date_Of_Order, Guest_ID, Payment_type, Delivery_type)
-VALUES (4,$date,'{$_SESSION['guest_id']}','Cash','Delivery')");
+VALUES ($cart_last_id+$i,'$date','{$_SESSION['guest_id']}',$Payment_Method,$Delivery_Method)");
 }
+$adminconnection->query('SET foreign_key_checks = 1');
   // If we arrive here, it means that no exception was thrown
   // i.e. no query has failed, and we can commit the transaction
   mysqli_commit($adminconnection);
-  echo "<script>alert('Order Successful.')</script>";
+  echo "<script>alert('Order successful.')</script>";
   // header('Location: index.php');
-
   } catch (Exception $e) {
     echo $e;
   // An exception has been thrown

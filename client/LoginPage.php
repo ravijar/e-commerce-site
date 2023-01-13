@@ -32,7 +32,7 @@ if(isset($_POST['user_login'])){
         $error_credentials = '';
         echo "<script>alert('Login successful.')</script>";
         $_SESSION["login_user_city"] = $row_data['City'];
-        $_SESSION["user_id"] = $row_data['User_ID'];
+        $_SESSION['user_id'] = $row_data['User_ID'];
         header('Location: checkoutPage.php');
         
       }else{
@@ -84,7 +84,12 @@ if(isset($_POST['guest_login'])){
       die(mysqli_error($adminconnection));	
     }else{
       $_SESSION["login_user_city"] = $guest_city;
-
+      $select_guest_details = "Select * from guest where Telephone_No=$guest_contact";
+    $result_guest_details = mysqli_query($adminconnection, $select_guest_details);
+    while ($row_data = mysqli_fetch_assoc($result_guest_details)) {
+      $_SESSION['guest_id'] = $row_data['Guest_ID'];
+    }
+      
       header('Location: checkoutPage.php');
     }
   }

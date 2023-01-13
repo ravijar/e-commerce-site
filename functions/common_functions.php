@@ -280,12 +280,12 @@ function  view_product_details()
       }
     }
     echo " </select> 
-    <select id='VariantDetails' name='VariantDetails' class='form-select form-select-lg mb-3' aria-label='.form-select-lg example'>
-      <option selected class='d-none'>Select Units</option>
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-    </select> 
+    <!--<select id='UnitSelection' name='UnitSelection' class='form-select form-select-lg mb-3' aria-label='.form-select-lg example'>
+    <option selected class='d-none'>Select Units</option>
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
+  </select> -->
   <div class='ms-auto me-4'>
   <button type='submit' class='btn btn-primary my-3' name='add'>Add to Cart <i class='fas fa-shopping-cart'></i></button>
     <!-- <a href='CartPage.php' class='btn btn-primary' name='add' >Add to Cart</a> -->
