@@ -198,7 +198,7 @@ for ($i = 0; $i <=$arrayLength-1; $i++) {
   
   $adminconnection->query('SET foreign_key_checks = 0');
   $adminconnection -> query("INSERT INTO cart_item (Cart_ID,Variant_ID, Quantity, Item_Total_Price)
-VALUES ($cart_last_id+$i,$VariantID,$Quantity,$Item_Total_Price)");
+VALUES ($cart_last_id,$VariantID,$Quantity,$Item_Total_Price)");
 $adminconnection->query('SET foreign_key_checks = 1');
 $result = $adminconnection -> query("SELECT Quantity FROM inventory WHERE Variant_ID = '{$_SESSION['cart_items'][$i][0]}'");
 
