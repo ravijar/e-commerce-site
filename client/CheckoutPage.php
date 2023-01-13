@@ -192,7 +192,7 @@ VALUES ($cart_last_id,'$date','{$_SESSION['user_id']}','$Payment_Method','$Deliv
 }
 else if($nulluser == null){
   $adminconnection -> query("INSERT INTO `order` (Cart_ID, Date_Of_Order, Guest_ID, Payment_type, Delivery_type)
-VALUES ($cart_last_id+$i,'$date','{$_SESSION['guest_id']}',$Payment_Method,$Delivery_Method)");
+VALUES ($cart_last_id+$i,'$date','{$_SESSION['guest_id']}','$Payment_Method','$Delivery_Method')");
 }
 $adminconnection->query('SET foreign_key_checks = 1');
  
