@@ -47,7 +47,8 @@ if(isset($_POST['add'])){
       </thead>
       <tbody>
         <?php
-        if(!empty($_SESSION['cart'])){
+        
+        if(!empty($_SESSION['cart']) or !isset($_SESSION["PlaceOrder"])){
           $varient_id = array_column($_SESSION['cart'],'VariantDetails');
           $variant_count;
          $variant_count=0;
@@ -62,7 +63,7 @@ if(isset($_POST['add'])){
         }
         }
         
-        
+      
         
         ?>
       </tbody>
@@ -72,7 +73,8 @@ if(isset($_POST['add'])){
     <div class="py-3 fw-bold lead">
       <span class="bd-highlight ">Total: </span>
       <?php
-      if(!empty($_SESSION['cart'])){
+      
+      if(!empty($_SESSION['cart']) or !isset($_SESSION["PlaceOrder"])){
         echo "<span class='bd-highlight pb-3'>$cart_total</span> ";
       }
       else{

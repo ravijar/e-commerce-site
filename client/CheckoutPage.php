@@ -33,6 +33,7 @@ header('Location: LoginPage.php');
             </thead>
             <tbody>
             <?php
+            if(!isset($_POST['PlaceOrder'])){
         if(!empty($_SESSION['cart'])){
           $varient_id = array_column($_SESSION['cart'],'VariantDetails');
           $variant_count;
@@ -44,12 +45,16 @@ header('Location: LoginPage.php');
             $cart_total = load_checkout_items($id,$variant_count,$cart_total);
           }
           
+          
         }
-        }
+        
         $_SESSION["cart_total"] = $cart_total;
         
-        
-        
+      }
+    }
+    else{
+      $_SESSION["PlaceOrder"] = $_POST['PlaceOrder'];
+    }
         ?>
             </tbody>
           </table>
@@ -57,27 +62,49 @@ header('Location: LoginPage.php');
             <div class="col-2 text-end ">Total:</div>
 
             <?php
+            if(!isset($_POST['PlaceOrder'])){
       if(!empty($_SESSION['cart'])){
         echo "<div class='col-3'>$cart_total LKR</div> ";
       }
       else{
         echo "<div class='col-3'>0</div>  ";
       }
+    }
        ?>
           </div>
           <div class="row text-secondary lead justify-content-end">
             <div class="col-6 text-end">Estimated Delivery Time:</div>
             <?php
+            if(!isset($_POST['PlaceOrder'])){
               $select_delivery_city= "Select * from delivery where City='".$_SESSION['login_user_city']."'";
               $result_delivery_city = mysqli_query($adminconnection, $select_delivery_city);
               
               while ($row_data = mysqli_fetch_assoc($result_delivery_city)) {
                 $days = $row_data['Days'];
+                
+              }
+
+              $arrayLength = count($_SESSION['cart_items']);
+              $done = True;
+              for ($i = 0; $i <=$arrayLength-1; $i++) {
+              $result = $adminconnection -> query("SELECT Quantity FROM inventory WHERE Variant_ID = '{$_SESSION['cart_items'][$i][0]}'");
+              while($row = $result->fetch_assoc()) {
+                $remainder = $row['Quantity']-$_SESSION['cart_items'][$i][1];
+                
+                if($remainder<0 and $done){
+                  $days = $days+3;
+                  $done = False;
+                }
+
+              }
+              }
               }
             
-          
             ?>
-            <div class="col-3"><?php echo $days; ?> Days</div>
+            <div class="col-3"><?php 
+            if(!isset($_POST['PlaceOrder'])){
+            echo $days; }
+            ?> Days</div>
           </div>
           <form action = "" method = 'post'>
           <div class="row mt-4 mb-2">
@@ -173,7 +200,7 @@ for ($i = 0; $i <=$arrayLength-1; $i++) {
   $adminconnection -> query("INSERT INTO cart_item (Cart_ID,Variant_ID, Quantity, Item_Total_Price)
 VALUES ($cart_last_id+$i,$VariantID,$Quantity,$Item_Total_Price)");
 $adminconnection->query('SET foreign_key_checks = 1');
-$result = $adminconnection -> query("SELECT Quantity FROM inventory WHERE Variant_ID = '{$_SESSION['cart_items'][$i][1]}'");
+$result = $adminconnection -> query("SELECT Quantity FROM inventory WHERE Variant_ID = '{$_SESSION['cart_items'][$i][0]}'");
 
 
 while($row = $result->fetch_assoc()) {
@@ -197,6 +224,7 @@ VALUES ($cart_last_id+$i,'$date','{$_SESSION['guest_id']}','$Payment_Method','$D
 $adminconnection->query('SET foreign_key_checks = 1');
  
   mysqli_commit($adminconnection);
+  unset($_SESSION['cart']);
   echo "<script>alert('Order successful.')</script>";
   // header('Location: index.php');
   } catch (Exception $e) {

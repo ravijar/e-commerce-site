@@ -296,7 +296,7 @@ function load_checkout_items($varientID, $variant_count, $cart_total)
 
     $iteration = 0;
     $items = 
-      array($Varient_ID,2,$total)
+      array($Varient_ID,$varientID[1],$total)
     ;
     $_SESSION['cart_items'][$variant_count-1] = $items;
     return $cart_total;
