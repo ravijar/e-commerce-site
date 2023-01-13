@@ -53,7 +53,7 @@ include('../client/inc/header.php');
     </div>
   </div>
   <div class="text-center p-3 text-secondary" style="background-color: rgba(0, 0, 0, 0.3)">
-    Copyright &copy; 2022 My Shop
+    Copyright &copy; 1998-2022, Kade.lk
   </div>
 </footer>
 <script>
