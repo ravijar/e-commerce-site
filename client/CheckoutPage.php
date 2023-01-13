@@ -143,15 +143,14 @@ if(!isset($_SESSION['guest_id'])){
   
 
 
-// Turn autocommit off
+
 
 $nullguest= $_SESSION['guest_id'];
 $nulluser = $_SESSION['user_id'];
 try {
   global $adminconnection;
-  // First of all, let's begin a transaction
   mysqli_begin_transaction($adminconnection);
-  // A set of queries; if one fails, an exception should be thrown
+  
   if($nullguest == NULL){
     $adminconnection -> query("INSERT INTO cart (User_ID,Total_Value)
 VALUES ('{$_SESSION['user_id']}','{$_SESSION['cart_total']}')");
@@ -169,14 +168,6 @@ for ($i = 0; $i <=$arrayLength-1; $i++) {
  
   $Quantity = $array[$i][1];
   $Item_Total_Price = $array[$i][2];
-/*   echo " ";
-  echo $cart_last_id+$i;
-  echo " ";
-  echo $VariantID;
-  echo " ";
-  echo $Quantity;
-  echo " ";
-  echo $Item_Total_Price; */
   
   $adminconnection->query('SET foreign_key_checks = 0');
   $adminconnection -> query("INSERT INTO cart_item (Cart_ID,Variant_ID, Quantity, Item_Total_Price)
@@ -201,18 +192,16 @@ VALUES ($cart_last_id,'$date','{$_SESSION['user_id']}','$Payment_Method','$Deliv
 }
 else if($nulluser == null){
   $adminconnection -> query("INSERT INTO `order` (Cart_ID, Date_Of_Order, Guest_ID, Payment_type, Delivery_type)
-VALUES ($cart_last_id+$i,'$date','{$_SESSION['guest_id']}',$Payment_Method,$Delivery_Method)");
+VALUES ($cart_last_id+$i,'$date','{$_SESSION['guest_id']}','$Payment_Method','$Delivery_Method')");
 }
 $adminconnection->query('SET foreign_key_checks = 1');
-  // If we arrive here, it means that no exception was thrown
-  // i.e. no query has failed, and we can commit the transaction
+ 
   mysqli_commit($adminconnection);
   echo "<script>alert('Order successful.')</script>";
   // header('Location: index.php');
   } catch (Exception $e) {
     echo $e;
-  // An exception has been thrown
-  // We must rollback the transaction
+  
   mysqli_rollback($adminconnection);
   }
 
