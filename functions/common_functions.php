@@ -21,6 +21,7 @@ function get_products()
       $Category_ID = $row_data['Category_ID'];
       $Subcategory_ID = $row_data['Subcategory_ID'];
       $Image = $row_data['Image'];
+      
 
       echo "<div class='col-lg-3 col-md-6'>
       <div class='card py-2 bg-dark text-light text-center'>
@@ -229,6 +230,7 @@ function  view_product_details()
       $Category_ID = $row_data['Category_ID'];
       $Subcategory_ID = $row_data['Subcategory_ID'];
       $Image = $row_data['Image'];
+      $description  = $row_data['Description'];
 
       echo " <div class='container mt-5'>
     <form action='CartPage.php' method='post'>
@@ -246,9 +248,7 @@ function  view_product_details()
             <h2 class='mb-4'>$Title</h2>
             <div class='lead'>Product Description:</div>
             <p class='mb-4'>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque
-              maxime labore deserunt quasi at autem natus veritatis quia
-              voluptas nam!
+            $description
             </p>
             <select id='VariantDetails' name='VariantDetails' class='form-select form-select-lg mb-3' aria-label='.form-select-lg example'>
             <option selected class='d-none'>Select Variant</option>";
