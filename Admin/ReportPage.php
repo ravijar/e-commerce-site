@@ -18,7 +18,7 @@ $months = [
 
 <?php
 // customer order report
-$sql = 'SELECT Order_ID,Date_Of_Order,First_Name,Last_Name,Total_Value FROM `order`,`user`,`cart` WHERE `order`.User_ID = `user`.User_ID AND `order`.Cart_ID = `cart`.Cart_ID AND `order`.Guest_ID IS NULL;';
+$sql = 'SELECT Order_ID,Date_Of_Order,First_Name,Last_Name,Total_Value FROM `order`,`user`,`cart` WHERE `order`.User_ID = `user`.User_ID AND `order`.Cart_ID = `cart`.Cart_ID AND `order`.Guest_ID IS NULL ORDER BY Date_of_Order;';
 $result = mysqli_query($adminconnection, $sql);
 $customer_order_report = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
