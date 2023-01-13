@@ -58,14 +58,14 @@
   $sql->bind_param("ss",$year,$quarter);
   $sql->execute();
   $result = $sql->get_result();
-  $report  = array();
+  $sales_report  = array();
   $sum_Quantity = $sum_Total = 0;
   while($row = $result->fetch_assoc()){
-    $report[] = $row;
+    $sales_report[] = $row;
     $sum_Quantity += $row['Quantity'];
     $sum_Total += $row['Total'];
   }
-  if(empty($report)){
+  if(empty($sales_report)){
     $show_set = false;
   }
 
@@ -161,6 +161,32 @@
         <div class="h1 text-start pb-5">Report</div>
     
         <div class="row align-items-start gap-5 justify-content-between mb-5">
+          
+    
+          <div class="col card text-black bg-light py-3">
+            <div class="h4 caption-top text-start mb-4">Customer Order Report</div>
+            <table class="table caption-top table-secondary table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Customer</th>
+                  <th scope="col">Order ID</th>
+                  <th scope="col">Total</th> 
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach($customer_order_report as $report): ?>
+                <tr>
+                  <th><?php echo $report['Date_Of_Order'];?></th>
+                  <td><?php echo $report['First_Name'].' '.$report['Last_Name'];?></td>
+                  <td><?php echo $report['Order_ID'];?></td>
+                  <td><?php echo $report['Total_Value'];?></td>
+                </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+          </div>
+
           <div class="col card text-black py-3 bg-light">
             <div class="h4 caption-top text-start mb-4">Quarterly Sales Report</div>
             <table class="table caption-top table-secondary table-bordered">
@@ -208,7 +234,7 @@
                 </tr>
               </thead>
               <tbody>
-              <?php foreach($report as $record): ?>
+              <?php foreach($sales_report as $record): ?>
                 <tr>
                   <td><?php echo $record['Title'];?></td>
                   <td><?php echo $record['Quantity'];?></td>
@@ -226,31 +252,9 @@
               <?php endif; ?>
             </table>
           </div>
-    
-          <div class="col card text-black bg-light py-3">
-            <div class="h4 caption-top text-start mb-4">Customer Order Report</div>
-            <table class="table caption-top table-secondary table-bordered">
-              <thead>
-                <tr>
-                  <th scope="col">Date</th>
-                  <th scope="col">Customer</th>
-                  <th scope="col">Order ID</th>
-                  <th scope="col">Total</th> 
-                </tr>
-              </thead>
-              <tbody>
-                <?php foreach($customer_order_report as $report): ?>
-                <tr>
-                  <th><?php echo $report['Date_Of_Order'];?></th>
-                  <td><?php echo $report['First_Name'].' '.$report['Last_Name'];?></td>
-                  <td><?php echo $report['Order_ID'];?></td>
-                  <td><?php echo $report['Total_Value'];?></td>
-                </tr>
-                <?php endforeach; ?>
-              </tbody>
-            </table>
-          </div>
         </div>
+
+
     
         <div class="d-flex flex-column bd-highlight mb-3 text-start lead gap-2">
           <div class="p-3 bd-highlight card bg-light text-black d-flex flex-column gap-2">
