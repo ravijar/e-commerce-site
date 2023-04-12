@@ -1,9 +1,9 @@
 <?php
 
-$host="ecommerce-site-db.ck2iogphtt9t.ap-northeast-1.rds.amazonaws.com";
-$dbuser="admin";
-$dbpwd="user1234";
-$db="Ecommerce-db";
+$host="sql12.freesqldatabase.com";
+$dbuser="sql12606573";
+$dbpwd="uZUClXyIsp";
+$db="sql12606573";
 //create connection
 $adminconnection=mysqli_connect($host,$dbuser,$dbpwd,$db) ;
 //mysql_select_db($db);
