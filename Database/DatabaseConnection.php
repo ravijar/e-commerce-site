@@ -1,9 +1,9 @@
 <?php
 
-$host="sql12.freesqldatabase.com";
-$dbuser="sql12606573";
-$dbpwd="uZUClXyIsp";
-$db="sql12606573";
+$host="localhost";
+$dbuser="root";
+$dbpwd="";
+$db="ecommerce-db";
 //create connection
 $adminconnection=mysqli_connect($host,$dbuser,$dbpwd,$db) ;
 //mysql_select_db($db);
